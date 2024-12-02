@@ -14,17 +14,20 @@ def add_matrices2D(mat1, mat2):
     Return: list
     """
     result = []
+    row = []
 
     if len(mat1) != len(mat2):
         return None
 
-    for i in len(mat1):
+    for i in range(len(mat1)):
         arr1 = mat1[i]
         arr2 = mat2[i]
         if len(arr1) != len(arr2):
             return None
 
         for idx in range(len(arr1)):
-            result.append(arr1[idx] + arr2[idx])
+            row.append(arr1[idx] + arr2[idx])
+        result.append(row)
+        row = []
 
     return result
