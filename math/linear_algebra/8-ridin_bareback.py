@@ -21,7 +21,7 @@ def mat_mul(mat1, mat2):
     cols2 = len(mat2[0])  # 4
 
     if cols1 != rows2:
-        raise None
+        return None
 
     result = [[0 for idx in range(cols2)] for idx in range(rows1)]
 
