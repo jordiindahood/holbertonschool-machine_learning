@@ -5,9 +5,6 @@ module file for slice like a ninja
 """
 
 
-import numpy as np
-
-
 def np_slice(matrix, axes={}):
     """a function that slices a matrix along specific axes
 
@@ -16,7 +13,7 @@ def np_slice(matrix, axes={}):
     axes -- dict
     Return -- numpy.ndarray
     """
-    slices = [slice(None)] * np.ndim(matrix)
+    slices = [slice(None)] * matrix.ndim  # type: ignore
 
     for ky, vl in axes.items():
         slices[ky] = slice(*vl)
