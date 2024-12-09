@@ -6,5 +6,5 @@ def line():
 
     y = np.arange(0, 11) ** 3
     plt.figure(figsize=(6.4, 4.8))
-    plt.plot(y, 'r')
+    plt.plot(y,'r')
     plt.show()
