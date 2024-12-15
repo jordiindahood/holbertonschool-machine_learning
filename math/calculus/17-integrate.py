@@ -24,5 +24,6 @@ def poly_integral(poly, C=0):
 
         while len(dx) > 1 and dx[-1] == 0:
             dx.pop()
-
+    else:
+        return poly
     return dx
