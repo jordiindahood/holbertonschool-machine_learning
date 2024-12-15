@@ -15,9 +15,9 @@ def poly_integral(poly, C=0):
         return None
 
     dx = [C]
-    
-    if len(poly) != 1:
-        return dx    
+
+    if poly == [0]:
+        return dx
 
     for pow, coef in enumerate(poly):
         new_coef = coef / (pow + 1)
@@ -26,4 +26,5 @@ def poly_integral(poly, C=0):
 
         while len(dx) > 1 and dx[-1] == 0:
             dx.pop()
+
     return dx
