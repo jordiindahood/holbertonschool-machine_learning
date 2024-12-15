@@ -12,7 +12,7 @@ def poly_derivative(poly):
         if len(poly) == 1:
             return [0]
 
-        dx = [coeff * poww for poww, coeff in enumerate(poly) if poww > 0]
+        dx = [coeff * poww for poww, coeff in enumerate(poly) if poww != 0]
 
         return dx
 
