@@ -24,7 +24,7 @@ def poly_integral(poly, C=0):
 
         dx.append(int(new_coef) if new_coef.is_integer() else new_coef)
 
-        while len(dx) > 1 and dx[-1] == 0:
-            dx.pop()
+    while len(dx) > 1 and dx[-1] == 0:
+        dx.pop()
 
     return dx
