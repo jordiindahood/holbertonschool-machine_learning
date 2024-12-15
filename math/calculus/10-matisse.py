@@ -8,12 +8,12 @@ def poly_derivative(poly):
     """
     calculation
     """
-    if not isinstance(poly, list) or not all(isinstance(c, int) for c in poly):
-        return None
+    if isinstance(poly, list) or all(isinstance(c, int) for c in poly):
+        if len(poly) == 1:
+            return [0]
 
-    if len(poly) == 1:
-        return [0]
+        dx = [coeff * poww for poww, coeff in enumerate(poly) if poww > 0]
 
-    dx = [coeff * poww for poww, coeff in enumerate(poly) if poww > 0]
+        return dx
 
-    return dx
+    return None
