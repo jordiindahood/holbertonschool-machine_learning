@@ -19,6 +19,9 @@ class Node:
         is_root=False,
         depth=0,
     ):
+        """
+            init
+        """
         self.feature = feature
         self.threshold = threshold
         self.left_child = left_child
@@ -29,6 +32,9 @@ class Node:
         self.depth = depth
 
     def max_depth_below(self):
+        """
+            max depth
+        """
         if self.is_leaf:
             return self.depth
 
@@ -45,12 +51,18 @@ class Leaf(Node):
     """
 
     def __init__(self, value, depth=None):
+        """
+            init
+        """
         super().__init__()
         self.value = value
         self.is_leaf = True
         self.depth = depth
 
     def max_depth_below(self):
+        """
+            max depth
+        """
         return self.depth
 
 
@@ -63,6 +75,9 @@ class Decision_Tree:
         self, max_depth=10, min_pop=1,
         seed=0, split_criterion="random", root=None
     ):
+        """
+            init
+        """
         self.rng = np.random.default_rng(seed)
         if root:
             self.root = root
@@ -76,4 +91,7 @@ class Decision_Tree:
         self.predict = None
 
     def depth(self):
+        """
+            depth
+        """
         return self.root.max_depth_below()
