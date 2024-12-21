@@ -69,13 +69,13 @@ class Node:
             return f"-> leaf [value={self.value}]"
         else:
             Type = "-> node "
-        
+
         if self.left_child:
             left_str = self.left_child_add_prefix(str(self.left_child))
-        
+
         if self.right_child:
             right_str = self.right_child_add_prefix(str(self.right_child))
-        
+
         return f"{Type}[feature={self.feature}, threshold=\
 {self.threshold}]\n{left_str}{right_str}".rstrip()
 
