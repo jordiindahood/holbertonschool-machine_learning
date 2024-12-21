@@ -77,7 +77,7 @@ class Node:
             right_str = self.right_child_add_prefix(str(self.right_child))
         
         return f"{Type}[feature={self.feature}, threshold=\
-{self.threshold}]\n{left_str}{right_str}"
+{self.threshold}]\n{left_str}{right_str}".rstrip()
 
     def left_child_add_prefix(self, text):
         """
