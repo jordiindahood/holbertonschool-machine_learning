@@ -72,9 +72,13 @@ class Node:
 
         if self.left_child:
             left_str = self.left_child_add_prefix(str(self.left_child))
+        else:
+            left_str = ""
 
         if self.right_child:
             right_str = self.right_child_add_prefix(str(self.right_child))
+        else:
+            right_str = ""
 
         return f"{Type}[feature={self.feature}, threshold=\
 {self.threshold}]\n{left_str}{right_str}".rstrip()
@@ -98,7 +102,6 @@ class Node:
         for x in lines[1:]:
             new_text += ("       " + x) + "\n"
         return new_text
-
 
 class Leaf(Node):
     """
