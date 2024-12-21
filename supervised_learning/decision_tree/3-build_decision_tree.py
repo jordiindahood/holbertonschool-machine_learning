@@ -113,6 +113,7 @@ class Node:
             leaves.extend(self.right_child.get_leaves_below())
         return leaves
 
+
 class Leaf(Node):
     """
     LEAF CLASS
