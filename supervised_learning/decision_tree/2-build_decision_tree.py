@@ -59,30 +59,6 @@ class Node:
                 + self.right_child.count_nodes_below()
             )
 
-    def __str__(self):
-        """
-        STR
-        """
-        if self.is_root:
-            Type = "root "
-        elif self.is_leaf:
-            return f"-> leaf [value={self.value}]"
-        else:
-            Type = "-> node "
-
-        if self.left_child:
-            left_str = self.left_child_add_prefix(str(self.left_child))
-        else:
-            left_str = ""
-
-        if self.right_child:
-            right_str = self.right_child_add_prefix(str(self.right_child))
-        else:
-            right_str = ""
-
-        return f"{Type}[feature={self.feature}, threshold=\
-{self.threshold}]\n{left_str}{right_str}".rstrip()
-
     def left_child_add_prefix(self, text):
         """
         print left child
@@ -102,6 +78,28 @@ class Node:
         for x in lines[1:]:
             new_text += ("       " + x) + "\n"
         return new_text
+
+    def __str__(self):
+        """
+        STR
+        """
+        if self.is_root:
+            Type = "root "
+        elif self.is_leaf:
+            return f"-> leaf [value={self.value}]"
+        else:
+            Type = "-> node "
+        if self.left_child:
+            left_str = self.left_child_add_prefix(str(self.left_child))
+        else:
+            left_str = ""
+        if self.right_child:
+            right_str = self.right_child_add_prefix(str(self.right_child))
+        else:
+            right_str = ""
+        return f"{Type}[feature={self.feature}, threshold=\
+{self.threshold}]\n{left_str}{right_str}".rstrip()
+
 
 class Leaf(Node):
     """
@@ -142,12 +140,8 @@ class Decision_Tree:
     """
 
     def __init__(
-        self,
-        max_depth=10,
-        min_pop=1,
-        seed=0,
-        split_criterion="random",
-        root=None
+        self, max_depth=10, min_pop=1, seed=0,
+        split_criterion="random", root=None
     ):
         """
         init
@@ -180,4 +174,4 @@ class Decision_Tree:
         """
         STR REPRESENTATION
         """
-        return self.root.__str__()
+        return self.root.__str__() + "\n"
