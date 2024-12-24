@@ -135,7 +135,9 @@ class Node:
             child.update_bounds_below()
 
     def update_indicator(self):
-
+        """
+        update indicator
+        """
         def is_large_enough(x):
             """
             its so big omg
