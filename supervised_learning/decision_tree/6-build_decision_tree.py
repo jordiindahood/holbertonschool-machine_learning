@@ -164,6 +164,9 @@ class Node:
         )
 
     def pred(self, x):
+        """
+        pred
+        """
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
         else:
