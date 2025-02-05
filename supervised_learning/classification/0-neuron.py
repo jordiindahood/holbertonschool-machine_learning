@@ -4,6 +4,9 @@ import numpy as np
 
 
 class Neuron:
+    """
+    Neuron: Class
+    """
     def __init__(self, nx):
         """
         Initialize
