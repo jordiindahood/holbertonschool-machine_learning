@@ -28,6 +28,8 @@ class DeepNeuralNetwork:
         self.weights = {}
 
         for idx in range(1, self.L + 1):
+            if not isinstance(layers[idx], int) or layers[idx] < 1:
+                raise TypeError("layers must be a list of positive integers")
             layer_size = layers[idx - 1]
             prev_size = nx if idx == 1 else layers[idx - 2]
             self.weights[f"W{idx}"] = np.random.randn(
