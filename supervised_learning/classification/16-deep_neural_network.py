@@ -27,7 +27,7 @@ class DeepNeuralNetwork:
         self.cache = {}
         self.weights = {}
 
-        for idx in range(1, self.L + 1):
+        for idx in range(self.L):
             if not isinstance(layers[idx], int) or layers[idx] < 1:
                 raise TypeError("layers must be a list of positive integers")
             layer_size = layers[idx - 1]
