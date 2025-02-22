@@ -41,4 +41,4 @@ class DeepNeuralNetwork:
             else:
                 x = np.sqrt(2 / layers[i - 1])
                 self.weights[W_key] = np.random.randn(layers[i],
-                        layers[i - 1]) * x
+                                                      layers[i - 1]) * x
