@@ -38,32 +38,32 @@ class DeepNeuralNetwork:
 
             if i == 0:
                 x = np.sqrt(2 / nx)
-                self.__weights['W1'] = np.random.randn(layers[i], nx) * x
+                self.__weights["W1"] = np.random.randn(layers[i], nx) * x
             else:
                 x = np.sqrt(2 / layers[i - 1])
-                self.__weights[W_key] = np.random.randn(layers[i],
-                                                        layers[i - 1]) * x
+                self.__weights[W_key] = np.random.randn(
+                    layers[i], layers[i - 1]) * x
 
     @property
     def L(self):
-        """ L"""
+        """L"""
         return self.__L
 
     @property
     def cache(self):
-        """ cache"""
+        """cache"""
         return self.__cache
 
     @property
     def weights(self):
-        """ weight"""
+        """weight"""
         return self.__weights
 
     def forward_prop(self, X):
         """
         Calculates the forward propagation of the neural network
         """
-        self.__cache['A0'] = X
+        self.__cache["A0"] = X
 
         for i in range(self.__L):
             W_key = "W{}".format(i + 1)
@@ -71,12 +71,14 @@ class DeepNeuralNetwork:
             A_key_prev = "A{}".format(i)
             A_key_forw = "A{}".format(i + 1)
 
-            Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
+            Z = (
+                np.matmul(self.__weights[W_key], self.__cache[A_key_prev])
                 + self.__weights[b_key]
+            )
             self.__cache[A_key_forw] = 1 / (1 + np.exp(-Z))
 
         return self.__cache[A_key_forw], self.__cache
-    
+
     def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression.
