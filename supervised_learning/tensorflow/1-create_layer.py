@@ -9,10 +9,11 @@ def create_layer(prev, n, activation):
     Creates and returns TensorFlow placeholders for input data and labels.
     """
 
+    init = tf.keras.initializers.VarianceScaling(mode='fan_avg')
     layer = tf.keras.layers.Dense(
         units=n,
         activation=activation,
-        kernel_initializer=tf.keras.initializers.VarianceScaling(mode='fan_avg'),
+        kernel_initializer=init,
         name='layer'
     )
 
