@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ Task 2: 2. Forward Propagation """
-import tensorflow.compat.v1 as tf # type: ignore
+import tensorflow.compat.v1 as tf  # type: ignore
 tf.disable_eager_execution()
 
 create_layer = __import__('1-create_layer').create_layer
