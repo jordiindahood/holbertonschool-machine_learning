@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 11: 11. Save and Load Configuration """
+""" script 11 """
 
 import tensorflow.keras as K
 
