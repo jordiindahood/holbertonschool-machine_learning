@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 12: 12. Test """
+""" script 12 """
 
 import tensorflow.keras as K
 
