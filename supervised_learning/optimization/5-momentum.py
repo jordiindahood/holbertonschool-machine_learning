@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ script 5"""
 
+
 def update_variables_momentum(alpha, beta1, var, grad, v):
     """
     Updates a variable using the gradient descent with
