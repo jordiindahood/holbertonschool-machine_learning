@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 8: 8. RMSProp Upgraded """
+""" script 8 """
 import tensorflow as tf
 
 
