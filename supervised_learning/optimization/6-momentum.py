@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 6: 6. Momentum Upgraded  """
+""" script 6  """
 import tensorflow as tf
 
 
