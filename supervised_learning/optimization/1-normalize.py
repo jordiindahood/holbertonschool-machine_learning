@@ -8,4 +8,4 @@ def normalize(X, m, s):
     Normalizes (standardizes) a matrix
     """
     result = (X - m) / s
-    return
+    return result
