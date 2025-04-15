@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 """ script 12 """
-
 import tensorflow as tf
 
 
