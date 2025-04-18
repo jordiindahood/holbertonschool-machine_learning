@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """ script 3 """
-
 shuffle_data = __import__("2-shuffle_data").shuffle_data
 
 
