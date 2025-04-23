@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 0: 0. Valid Convolution """
+""" script 0"""
 import numpy as np
 
 
