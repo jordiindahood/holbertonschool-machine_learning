@@ -16,39 +16,39 @@ def densenet121(growth_rate=32, compression=1.0):
     X = K.Input(shape=(224, 224, 3))
     layers = [12, 24, 16]
 
-    my_layer = K.layers.BatchNormalization(axis=3)(X)
-    my_layer = K.layers.ReLU()(my_layer)
+    myLayer = K.layers.BatchNormalization(axis=3)(X)
+    myLayer = K.layers.ReLU()(myLayer)
 
-    my_layer = K.layers.Conv2D(filters=2 * growth_rate,
+    myLayer = K.layers.Conv2D(filters=2 * growth_rate,
                                kernel_size=(7, 7),
                                strides=(2, 2),
                                padding='same',
-                               kernel_initializer=initializer)(my_layer)
+                               kernel_initializer=initializer)(myLayer)
 
-    my_layer = K.layers.MaxPooling2D(pool_size=(3, 3),
+    myLayer = K.layers.MaxPooling2D(pool_size=(3, 3),
                                      padding='same',
-                                     strides=(2, 2))(my_layer)
+                                     strides=(2, 2))(myLayer)
 
     nb_filters = 2 * growth_rate
 
-    my_layer, nb_filters = dense_block(my_layer, nb_filters, growth_rate, 6)
+    myLayer, nb_filters = dense_block(myLayer, nb_filters, growth_rate, 6)
 
     for layer in layers:
-        my_layer, nb_filters = transition_layer(my_layer,
+        myLayer, nb_filters = transition_layer(myLayer,
                                                 nb_filters,
                                                 compression)
 
-        my_layer, nb_filters = dense_block(my_layer,
+        myLayer, nb_filters = dense_block(myLayer,
                                            nb_filters,
                                            growth_rate,
                                            layer)
 
-    my_layer = K.layers.AveragePooling2D(pool_size=(7, 7))(my_layer)
+    myLayer = K.layers.AveragePooling2D(pool_size=(7, 7))(myLayer)
 
-    my_layer = K.layers.Dense(units=1000,
+    myLayer = K.layers.Dense(units=1000,
                               activation='softmax',
-                              kernel_initializer=initializer)(my_layer)
+                              kernel_initializer=initializer)(myLayer)
 
-    model = K.models.Model(inputs=X, outputs=my_layer)
+    model = K.models.Model(inputs=X, outputs=myLayer)
 
     return model
