@@ -10,40 +10,45 @@ def densenet121(growth_rate=32, compression=1.0):
     """
     Builds the DenseNet-121 architecture.
     """
-    he_init = K.initializers.VarianceScaling(scale=2.0, seed=0)
 
-    inputs = K.Input(shape=(224, 224, 3))
+    initializer = K.initializers.HeNormal(seed=0)
 
-    # Initial Convolution and MaxPooling
-    bn = K.layers.BatchNormalization()(inputs)
-    act = K.layers.Activation('relu')(bn)
-    conv = K.layers.Conv2D(
-        64, kernel_size=7, strides=2, padding='same',
-        kernel_initializer=he_init
-    )(act)
-    pool = K.layers.MaxPooling2D(pool_size=3, strides=2, padding='same')(conv)
+    X = K.Input(shape=(224, 224, 3))
+    layers = [12, 24, 16]
 
-    # Dense blocks and transition layers
-    num_blocks = [6, 12, 24, 16]  # number of layers in each dense block
+    my_layer = K.layers.BatchNormalization(axis=3)(X)
+    my_layer = K.layers.ReLU()(my_layer)
 
-    x, nb_filters = dense_block(pool, 64, growth_rate, num_blocks[0])
-    x, nb_filters = transition_layer(x, nb_filters, compression)
+    my_layer = K.layers.Conv2D(filters=2 * growth_rate,
+                               kernel_size=(7, 7),
+                               strides=(2, 2),
+                               padding='same',
+                               kernel_initializer=initializer)(my_layer)
 
-    x, nb_filters = dense_block(x, nb_filters, growth_rate, num_blocks[1])
-    x, nb_filters = transition_layer(x, nb_filters, compression)
+    my_layer = K.layers.MaxPooling2D(pool_size=(3, 3),
+                                     padding='same',
+                                     strides=(2, 2))(my_layer)
 
-    x, nb_filters = dense_block(x, nb_filters, growth_rate, num_blocks[2])
-    x, nb_filters = transition_layer(x, nb_filters, compression)
+    nb_filters = 2 * growth_rate
 
-    x, nb_filters = dense_block(x, nb_filters, growth_rate, num_blocks[3])
+    my_layer, nb_filters = dense_block(my_layer, nb_filters, growth_rate, 6)
 
-    # Final Batch Norm + ReLU + Global Average Pooling
-    x = K.layers.BatchNormalization()(x)
-    x = K.layers.Activation('relu')(x)
-    x = K.layers.GlobalAveragePooling2D()(x)
+    for layer in layers:
+        my_layer, nb_filters = transition_layer(my_layer,
+                                                nb_filters,
+                                                compression)
 
-    # Fully connected classification layer
-    outputs = K.layers.Dense(1000, activation='softmax', kernel_initializer=he_init)(x)
+        my_layer, nb_filters = dense_block(my_layer,
+                                           nb_filters,
+                                           growth_rate,
+                                           layer)
 
-    model = K.Model(inputs=inputs, outputs=outputs)
+    my_layer = K.layers.AveragePooling2D(pool_size=(7, 7))(my_layer)
+
+    my_layer = K.layers.Dense(units=1000,
+                              activation='softmax',
+                              kernel_initializer=initializer)(my_layer)
+
+    model = K.models.Model(inputs=X, outputs=my_layer)
+
     return model
