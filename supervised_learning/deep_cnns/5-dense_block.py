@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 5: 5. Dense Block  """
+""" script 5 """
 from tensorflow import keras as K
 
 
