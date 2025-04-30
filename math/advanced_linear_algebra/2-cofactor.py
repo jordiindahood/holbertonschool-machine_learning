@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 2: 2-cofactor.py """
+""" script 2 """
 
 
 def determinant(matrix):
