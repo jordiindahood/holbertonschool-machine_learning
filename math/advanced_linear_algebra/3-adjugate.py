@@ -86,10 +86,10 @@ def adjugate(matrix):
     """
     cof = cofactor(matrix)
 
-    ad = []
+    result = []
     for i in range(len(matrix)):
-        ad.append([])
+        result.append([])
         for j in range(len(matrix)):
-            ad[i].append(cof[j][i])
+            result[i].append(cof[j][i])
 
-    return ad
+    return result
