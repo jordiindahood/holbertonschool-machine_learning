@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 3 """
+"""script 3"""
 
 
 def determinant(matrix):
@@ -7,8 +7,9 @@ def determinant(matrix):
     Computes the determinant of a square matrix using recursion.
     """
 
-    if not isinstance(matrix, list) or not all(isinstance(row, list)
-                                               for row in matrix):
+    if not isinstance(matrix, list) or not all(
+        isinstance(row, list) for row in matrix
+    ):
         raise TypeError("matrix must be a list of lists")
 
     if len(matrix[0]) == 0:
@@ -24,8 +25,9 @@ def determinant(matrix):
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
     return sum(
-        matrix[0][i] * (-1) ** i * determinant([row[:i] + row[i + 1:] for
-                                                row in matrix[1:]])
+        matrix[0][i]
+        * (-1) ** i
+        * determinant([row[:i] + row[i + 1:] for row in matrix[1:]])
         for i in range(len(matrix))
     )
 
@@ -55,8 +57,9 @@ def minor(matrix):
         minor.append([])
         for j in range(len(matrix)):
             rows = [matrix[m] for m in range(len(matrix)) if m != i]
-            new_m = [[row[n] for n in range(len(matrix)) if n != j]
-                     for row in rows]
+            new_m = [
+                [row[n] for n in range(len(matrix)) if n != j] for row in rows
+            ]
             my_det = determinant(new_m)
             minor[i].append(my_det)
 
@@ -65,20 +68,21 @@ def minor(matrix):
 
 def cofactor(matrix):
     """
-   Computes the cofactor matrix of a given square matrix.
+    Computes the cofactor matrix of a given square matrix.
     """
 
     M = minor(matrix)
 
     cofactor = []
     for i in range(len(matrix)):
-        cofactor .append([])
+        cofactor.append([])
         for j in range(len(matrix)):
             sign = (-1) ** (i + j)
             value = sign * M[i][j]
             cofactor[i].append(value)
 
     return cofactor
+
 
 def adjugate(matrix):
     """
