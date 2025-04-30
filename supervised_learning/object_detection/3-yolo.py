@@ -136,7 +136,7 @@ class Yolo:
 
     def iou(self, x1, x2, y1, y2, pos1, pos2, area):
         """
-        Calculates the Intersection over Union (IoU) between two bounding boxes.
+        Calculates the Intersection over Union (IoU) between two boxes.
         """
 
         a = np.maximum(x1[pos1], x1[pos2])
