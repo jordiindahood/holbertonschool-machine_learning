@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-"""script 0"""
+"""script POISSON"""
 
+import math
 
 class Poisson:
     """script 0"""
@@ -18,3 +19,16 @@ class Poisson:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
             self.lambtha = float(sum(data) / len(data))
+
+    def pmf(self, k):
+        """Calculates the PMF for a given number of successes (k)"""
+        if not isinstance(k, int):
+            k = int(k)
+        if k < 0:
+            return 0
+
+        e = math.e
+        λ = self.lambtha
+        numerator = (e**-λ) * (λ**k)
+        denominator = math.factorial(k)
+        return numerator / denominator
