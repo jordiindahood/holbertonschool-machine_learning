@@ -2,8 +2,6 @@
 
 """script 0"""
 
-import numpy as np
-
 likelihood = __import__('0-likelihood').likelihood
 
 
