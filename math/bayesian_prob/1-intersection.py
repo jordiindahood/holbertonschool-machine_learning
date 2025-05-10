@@ -4,6 +4,7 @@
 
 import numpy as np
 
+
 def n_choose_x(n, x):
     """n_choose_x"""
     n_fact = np.math.factorial(n)
