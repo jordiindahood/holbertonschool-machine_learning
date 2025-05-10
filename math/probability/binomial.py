@@ -29,3 +29,26 @@ class Binomial:
 
             self.n = n
             self.p = p
+
+    def pmf(self, k):
+        """Calculates the PMF for a given number of successes (k)"""
+        if not isinstance(k, int):
+            k = int(k)
+        if k < 0 or k > self.n:
+            return 0
+
+        n_fact = self.factorial(self.n)
+        k_fact = self.factorial(k)
+        nk_fact = self.factorial(self.n - k)
+        comb = n_fact / (k_fact * nk_fact)
+
+        return comb * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+    def factorial(self, num):
+        """Computes factorial of a number"""
+        if num < 2:
+            return 1
+        result = 1
+        for i in range(2, num + 1):
+            result *= i
+        return result
