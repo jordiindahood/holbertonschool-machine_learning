@@ -3,6 +3,7 @@
 """script 0"""
 
 import numpy as np
+from math import comb
 
 
 def likelihood(x, n, P):
@@ -20,9 +21,6 @@ def likelihood(x, n, P):
         raise TypeError("P must be a 1D numpy.ndarray")
     if np.any((P < 0) | (P > 1)):
         raise ValueError("All values in P must be in the range [0, 1]")
-
-    # Use binomial coefficient
-    from math import comb
 
     coeff = comb(n, x)
     likelihood_values = coeff * (P**x) * ((1 - P) ** (n - x))
