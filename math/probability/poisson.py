@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+"""script 0"""
+
 class Poisson:
     """script 0"""
 
