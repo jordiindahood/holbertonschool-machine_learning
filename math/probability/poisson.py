@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-
 """script POISSON"""
 
 
 class Poisson:
-    """script 0"""
+    """Represents a Poisson distribution"""
 
     def __init__(self, data=None, lambtha=1.0):
         """Init"""
@@ -33,6 +32,18 @@ class Poisson:
         numerator = (e**-λ) * (λ**k)
         denominator = self.factorial(k)
         return numerator / denominator
+
+    def cdf(self, k):
+        """Calculates the CDF for a given number of successes (k)"""
+        if not isinstance(k, int):
+            k = int(k)
+        if k < 0:
+            return 0
+
+        cumulative = 0
+        for i in range(k + 1):
+            cumulative += self.pmf(i)
+        return cumulative
 
     def factorial(self, n):
         """Calculates factorial"""
