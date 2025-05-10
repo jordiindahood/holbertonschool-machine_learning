@@ -2,6 +2,7 @@
 
 """script 0"""
 
+
 class Poisson:
     """script 0"""
 
