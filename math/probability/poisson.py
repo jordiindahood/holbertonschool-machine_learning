@@ -2,6 +2,7 @@
 
 """script POISSON"""
 
+
 class Poisson:
     """script 0"""
 
@@ -17,7 +18,9 @@ class Poisson:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
             self.lambtha = float(sum(data) / len(data))
+        self.pi = 3.1415926536
         self.e = 2.7182818285
+
     def pmf(self, k):
         """Calculates the PMF for a given number of successes (k)"""
         if not isinstance(k, int):
