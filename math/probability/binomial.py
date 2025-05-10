@@ -52,3 +52,15 @@ class Binomial:
         for i in range(2, num + 1):
             result *= i
         return result
+
+    def cdf(self, k):
+        """Calculates the CDF for a given number of successes (k)"""
+        if not isinstance(k, int):
+            k = int(k)
+        if k < 0:
+            return 0
+
+        cdf_value = 0
+        for i in range(0, k + 1):
+            cdf_value += self.pmf(i)
+        return cdf_value
