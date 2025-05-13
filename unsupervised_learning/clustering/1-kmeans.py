@@ -5,50 +5,36 @@
 import numpy as np
 
 
-def initialize(X, k):
-    """Initializes cluster centroids for K-means using uniform distribution"""
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-        return None
-    if not isinstance(k, int) or k <= 0:
-        return None
-    n, d = X.shape
-    min_vals = np.min(X, axis=0)
-    max_vals = np.max(X, axis=0)
-    return np.random.uniform(low=min_vals, high=max_vals, size=(k, d))
-
-
 def kmeans(X, k, iterations=1000):
     """Performs K-means clustering on a dataset"""
-    if (
-        not isinstance(X, np.ndarray)
-        or len(X.shape) != 2
-        or not isinstance(k, int)
-        or k <= 0
-        or not isinstance(iterations, int)
-        or iterations <= 0
-    ):
+
+    if type(k) is not int or k <= 0:
+        return None, None
+
+    if type(X) is not np.ndarray or len(X.shape) != 2:
+        return None, None
+
+    if type(iterations) is not int or iterations <= 0:
         return None, None
 
     n, d = X.shape
-    C = initialize(X, k)
-    if C is None:
-        return None, None
-
-    for _ in range(iterations):
-        distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
-        clss = np.argmin(distances, axis=1)
-
-        new_C = np.copy(C)
-        for i in range(k):
-            if np.any(clss == i):
-                new_C[i] = np.mean(X[clss == i], axis=0)
-            else:
-                new_C[i] = np.random.uniform(
-                    np.min(X, axis=0), np.max(X, axis=0)
+    centroids = np.random.uniform(
+        np.min(X, axis=0), np.max(X, axis=0), size=(k, d)
+    )
+    for i in range(iterations):
+        copy = centroids.copy()
+        D = np.sqrt(((X - centroids[:, np.newaxis]) ** 2).sum(axis=2))
+        clss = np.argmin(D, axis=0)
+        for j in range(k):
+            if len(X[clss == j]) == 0:
+                centroids[j] = np.random.uniform(
+                    np.min(X, axis=0), np.max(X, axis=0), size=(1, d)
                 )
+            else:
+                centroids[j] = (X[clss == j]).mean(axis=0)
+        D = np.sqrt(((X - centroids[:, np.newaxis]) ** 2).sum(axis=2))
+        clss = np.argmin(D, axis=0)
+        if np.all(copy == centroids):
+            return centroids, clss
 
-        if np.allclose(C, new_C):
-            break
-        C = new_C
-
-    return C, clss
+    return centroids, clss
