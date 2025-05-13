@@ -27,3 +27,24 @@ class MultiNormal:
         X = data - self.mean
 
         self.cov = (X @ X.T) / (n - 1)
+        self.d = d
+
+    def pdf(self, x):
+        """
+        Calculates the PDF at a data point
+        """
+        if not isinstance(x, np.ndarray):
+            raise TypeError("x must be a numpy.ndarray")
+        if x.shape != (self.d, 1):
+            raise ValueError(f"x must have the shape ({self.d}, 1)")
+
+        x_m = x - self.mean
+
+        det = np.linalg.det(self.cov)
+        inv = np.linalg.inv(self.cov)
+
+        denom = np.sqrt((2 * np.pi) ** self.d * det)
+
+        expo = -0.5 * (x_m.T @ inv @ x_m)
+
+        return float((1 / denom) * np.exp(expo))
