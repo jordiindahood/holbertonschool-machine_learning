@@ -11,32 +11,37 @@ variance = __import__('2-variance').variance
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     """Tests for the optimum number of clusters by variance"""
 
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+    if type(X) is not np.ndarray or len(X.shape) != 2:
+        return None, None
+
+    if type(iterations) is not int or iterations <= 0:
+        return None, None
+
+    if type(kmin) is not int or kmin < 1:
+        return None, None
+
+    if kmax is not None and (type(kmax) is not int or kmax < 1):
+        return None, None
+
+    if kmax is not None and kmin >= kmax:
         return None, None
 
     n, d = X.shape
-
-    if not isinstance(kmin, int) or kmin < 1:
-        return None, None
     if kmax is None:
+
         kmax = n
-    if not isinstance(kmax, int) or kmax < kmin:
-        return None, None
-    if not isinstance(iterations, int) or iterations < 1:
-        return None, None
 
     results = []
     d_vars = []
 
-    variances = []
-
     for k in range(kmin, kmax + 1):
-        centroids, clss = kmeans(X, k, iterations)
-        results.append((centroids, clss))
-        var = variance(X, centroids)
-        variances.append(var)
+        C, clss = kmeans(X, k, iterations=1000)
+        results.append((C, clss))
 
-    base_variance = variances[0]
-    d_vars = [base_variance - v for v in variances]
+        if k == kmin:
+            first_var = variance(X, C)
+
+        var = variance(X, C)
+        d_vars.append(first_var - var)
 
     return results, d_vars
