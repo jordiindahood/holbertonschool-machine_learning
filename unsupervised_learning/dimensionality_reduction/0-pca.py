@@ -6,19 +6,13 @@ import numpy as np
 
 def pca(X, var=0.95):
     """
-    Performs PCA on a dataset
+    Performs Principal Component Analysis (PCA) on the given dataset.
     """
-    if not isinstance(X, np.ndarray) or X.ndim != 2:
-        raise TypeError("X must be a 2D numpy.ndarray")
-    if not (0 < var <= 1):
-        raise ValueError("var must be a float between 0 and 1")
-    U, S, Vt = np.linalg.svd(X, full_matrices=False)
+    u, s, vh = np.linalg.svd(X)
 
-    variances = (S**2) / (X.shape[0] - 1)
-    total_var = np.sum(variances)
-    explained = np.cumsum(variances) / total_var
+    cumsum = np.cumsum(s)
 
-    nd = np.searchsorted(explained, var) + 1
+    dim = [i for i in range(len(s)) if cumsum[i] / cumsum[-1] >= var]
+    ndim = dim[0] + 1
 
-    W = Vt[:nd].T
-    return W
+    return vh.T[:, :ndim]
