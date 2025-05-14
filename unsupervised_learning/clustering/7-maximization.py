@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
+
+"""script 7"""
+
 import numpy as np
+
 
 def maximization(X, g):
     """Performs the maximization step in the EM algorithm for a GMM"""
-    if (not isinstance(X, np.ndarray) or X.ndim != 2 or
-        not isinstance(g, np.ndarray) or g.ndim != 2):
+    if (
+        not isinstance(X, np.ndarray)
+        or X.ndim != 2
+        or not isinstance(g, np.ndarray)
+        or g.ndim != 2
+    ):
         return None, None, None
 
     n, d = X.shape
