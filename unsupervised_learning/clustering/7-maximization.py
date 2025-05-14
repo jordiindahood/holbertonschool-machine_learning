@@ -7,12 +7,11 @@ import numpy as np
 
 def maximization(X, g):
     """Performs the maximization step in the EM algorithm for a GMM"""
-    if (
-        not isinstance(X, np.ndarray)
-        or len(X.shape) != 2
-        or not isinstance(g, np.ndarray)
-        or len(g.shape) != 2
-    ):
+    if type(X) is not np.ndarray or len(X.shape) != 2:
+        return None, None, None
+    if type(g) is not np.ndarray or len(g.shape) != 2:
+        return None, None, None
+    if X.shape[0] != g.shape[1]:
         return None, None, None
 
     n, d = X.shape
