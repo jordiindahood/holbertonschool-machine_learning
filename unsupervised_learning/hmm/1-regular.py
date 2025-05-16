@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Regular Markov Chain Steady State """
+"""script 1"""
 
 import numpy as np
 
