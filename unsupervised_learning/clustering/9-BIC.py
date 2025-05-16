@@ -13,50 +13,47 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
 
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None, None, None
-    n, d = X.shape
-    if not isinstance(kmin, int) or kmin < 1:
-        return None, None, None, None
     if kmax is None:
-        kmax = n
-    if not isinstance(kmax, int) or kmax < kmin:
+        kmax = X.shape[0]
+    if type(kmin) is not int or kmin <= 0 or X.shape[0] <= kmin:
         return None, None, None, None
-    if not isinstance(iterations, int) or iterations <= 0:
+    if type(kmax) is not int or kmax <= 0 or X.shape[0] < kmax:
         return None, None, None, None
-    if not isinstance(tol, float) or tol < 0:
+    if kmax <= kmin:
         return None, None, None, None
-    if not isinstance(verbose, bool):
+    if type(iterations) is not int or iterations <= 0:
+        return None, None, None, None
+    if type(tol) is not float or tol < 0:
+        return None, None, None, None
+    if type(verbose) is not bool:
         return None, None, None, None
 
-    log = []
+    n, d = X.shape
+
     b = []
     results = []
+    ks = []
+    l_ = []
 
     for k in range(kmin, kmax + 1):
-        pi, m, S, g, log_likelihood = expectation_maximization(
-            X, k, iterations, tol, verbose
+        ks.append(k)
+
+        pi, m, S, g, l_k = expectation_maximization(
+            X, k, iterations=iterations, tol=tol, verbose=verbose
         )
-        if (
-            pi is None
-            or m is None
-            or S is None
-            or g is None
-            or log_likelihood is None
-        ):
-            return None, None, None, None
-
-        l.append(log_likelihood)
-
-        p = (k * d) + (k * d * (d + 1) / 2) + (k - 1)
-        BIC_value = p * np.log(n) - 2 * log_likelihood
-        b.append(BIC_value)
-
         results.append((pi, m, S))
 
-    log = np.array(log)
+        l_.append(l_k)
+        p = k - 1 + k * d + k * d * (d + 1) / 2
+
+        bic = p * np.log(n) - 2 * l_k
+        b.append(bic)
+
+    l_ = np.array(l_)
     b = np.array(b)
 
-    best_index = np.argmin(b)
-    best_k = kmin + best_index
-    best_result = results[best_index]
+    index = np.argmin(b)
+    best_k = ks[index]
+    best_result = results[index]
 
-    return best_k, best_result, log, b
+    return best_k, best_result, l_, b
