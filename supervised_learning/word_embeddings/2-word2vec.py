@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """script 2"""
 
-from gensim.models import Word2Vec
+import gensim
 
 
 def word2vec_model(
@@ -20,7 +20,7 @@ def word2vec_model(
     """
     sg = 0 if cbow else 1
 
-    model = Word2Vec(
+    model = gensim.models.Word2Vec(
         sentences=sentences,
         vector_size=vector_size,
         window=window,
@@ -28,7 +28,7 @@ def word2vec_model(
         sg=sg,
         negative=negative,
         seed=seed,
-        workers=workers,
+        workers=workers
     )
 
     model.train(sentences, total_examples=len(sentences), epochs=epochs)
