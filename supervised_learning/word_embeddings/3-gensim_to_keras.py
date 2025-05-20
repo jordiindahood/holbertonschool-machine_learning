@@ -10,15 +10,15 @@ def gensim_to_keras(model):
     keras Embedding layer
     """
 
-    weights = tf.convert_to_tensor(
-        [model.wv[word] for word in model.wv.index_to_key]
-    )
-    vocab_size, vector_size = weights.shape
+    weights = model.wv.vectors
+
+    vocab_size, embedding_dim = weights.shape
 
     embedding_layer = tf.keras.layers.Embedding(
         input_dim=vocab_size,
-        output_dim=vector_size,
-        weights=[weights.numpy()],
-        trainable=True,
+        output_dim=embedding_dim,
+        weights=[weights],
+        trainable=True
     )
+
     return embedding_layer
