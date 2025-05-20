@@ -9,10 +9,9 @@ def tf_idf(sentences, vocab=None):
     Creates a TF-IDF embedding matrix using sklearn.
     """
 
-    vectorizer = TfidfVectorizer(
-        vocabulary=sorted(set(vocab)) if vocab else None
-    )
-    embeddings = vectorizer.fit_transform(sentences).toarray()
-    features = vectorizer.get_feature_names_out().tolist()
+    vectorizer = TfidfVectorizer(vocabulary=vocab)
+    x = vectorizer.fit_transform(sentences)
+    embedding = x.toarray()
+    features = vectorizer.get_feature_names_out()
 
-    return embeddings, features
+    return embedding, features
