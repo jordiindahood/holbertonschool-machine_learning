@@ -29,8 +29,7 @@ def word2vec_model(
         negative=negative,
         seed=seed,
         workers=workers,
+        epochs=epochs,
     )
-
-    model.train(sentences, total_examples=len(sentences), epochs=epochs)
 
     return model
