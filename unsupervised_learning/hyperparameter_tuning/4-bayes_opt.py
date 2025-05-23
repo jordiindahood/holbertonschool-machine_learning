@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""script 4"""
+"""script 3"""
 
 import numpy as np
 from scipy.stats import norm
@@ -22,7 +22,9 @@ class BayesianOptimization:
         xsi=0.01,
         minimize=True,
     ):
-        """init"""
+        """
+        init
+        """
         self.f = f
         self.gp = GP(X_init, Y_init, l=l, sigma_f=sigma_f)
         self.X_s = np.linspace(bounds[0], bounds[1], ac_samples).reshape(-1, 1)
@@ -31,27 +33,23 @@ class BayesianOptimization:
 
     def acquisition(self):
         """
-        Computes the next best sample location using Expected Improvement (EI)
+        Computes the next best sample location using the Expected
+        Improvement (EI) acquisition function.
         """
-        mu, sigma = self.gp.predict(self.X_s)
-        sigma = np.sqrt(sigma)
+
+        m_sample, sigma = self.gp.predict(self.X_s)
 
         if self.minimize:
-            best_Y = np.min(self.gp.Y)
-            imp = best_Y - mu - self.xsi
+            sam = np.min(self.gp.Y)
+            imp = sam - m_sample - self.xsi
         else:
-            best_Y = np.max(self.gp.Y)
-            imp = mu - best_Y - self.xsi
+            sam = np.max(self.gp.Y)
+            imp = m_sample - sam - self.xsi
 
         with np.errstate(divide='warn'):
-            Z = np.zeros_like(imp)
-            mask = sigma > 0
-            Z[mask] = imp[mask] / sigma[mask]
-            EI = np.zeros_like(imp)
-            EI[mask] = imp[mask] * norm.cdf(Z[mask]) + sigma[mask] * norm.pdf(
-                Z[mask]
-            )
+            Z = imp / sigma
+            EI = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
+            EI[sigma == 0.0] = 0.0
 
-        X_next = self.X_s[np.argmax(EI)].reshape(1)
-
-        return X_next, EI
+        X_nest = self.X_s[np.argmax(EI)]
+        return X_nest, EI
