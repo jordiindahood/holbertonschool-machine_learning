@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """script 3"""
+
 import tensorflow.keras as keras
 import tensorflow as tf
 
