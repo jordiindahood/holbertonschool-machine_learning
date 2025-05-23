@@ -22,12 +22,15 @@ class GaussianProcess:
         """
         Computes the covariance kernel matrix using the RBF kernel
         """
-        sqdist = (
-            np.sum(X1**2, axis=1).reshape(-1, 1)
-            + np.sum(X2**2, axis=1)
-            - 2 * np.dot(X1, X2.T)
-        )
-        return self.sigma_f**2 * np.exp(-0.5 / self.l**2 * sqdist)
+        σ2 = self.sigma_f**2
+        l2 = self.l**2
+
+        sqr_sumx1 = np.sum(X1**2, 1).reshape(-1, 1)
+        sqr_sumx2 = np.sum(X2**2, 1)
+        sqr_dist = sqr_sumx1 - 2 * np.dot(X1, X2.T) + sqr_sumx2
+
+        kernel = σ2 * np.exp(-0.5 / l2 * sqr_dist)
+        return kernel
 
     def predict(self, X_s):
         """
