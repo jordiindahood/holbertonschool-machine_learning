@@ -8,23 +8,6 @@ def autoencoder(input_dim, hidden_units, latent_dim):
     """
     Creates a Variational Autoencoder (VAE) model consisting
     of an encoder and a decoder.
-
-    Args:
-        input_dim (int): The dimensionality of the input data.
-        hidden_units (list of int): A list specifying the number
-        of units in each hidden layer of the encoder and decoder.
-        latent_dim (int): The dimensionality of the latent space
-        (i.e., the output dimension of the encoder's latent
-        representation).
-
-    Returns:
-        encoder_model (keras.Model): The encoder model that maps
-        input data to a latent space.
-        decoder_model (keras.Model): The decoder model that
-        reconstructs the input data from the latent space.
-        vae (keras.Model): The complete VAE model combining
-        both the encoder and decoder, with a custom loss function
-        (reconstruction loss + KL divergence).
     """
     input_layer = keras.Input(shape=(input_dim,))
     hidden_layer = input_layer
