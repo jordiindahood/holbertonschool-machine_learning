@@ -34,15 +34,17 @@ class GaussianProcess:
 
     def predict(self, X_s):
         """
-        Predicts the mean and variance of points in a Gaussian process
+        Predicts the mean and variance of points in a Gaussian Process.
         """
+        s = X_s.shape[0]
+        K = self.K
         K_s = self.kernel(self.X, X_s)
-        K_ss = self.kernel(X_s, X_s)
-        K_inv = np.linalg.inv(self.K)
+        K_ss = self.kernel(X_s, X_s) + np.ones(s) - np.eye(s)
+        K_inv = np.linalg.inv(K)
 
-        mu = K_s.T.dot(K_inv).dot(self.Y).reshape(-1)
+        μ = (K_s.T.dot(K_inv).dot(self.Y)).flatten()
 
-        cov = K_ss - K_s.T.dot(K_inv).dot(K_s)
-        sigma = np.diag(cov)
+        cov_s = K_ss - K_s.T.dot(K_inv).dot(K_s)
+        cov_s = np.diag(cov_s)
 
-        return mu, sigma
+        return (μ, cov_s)
