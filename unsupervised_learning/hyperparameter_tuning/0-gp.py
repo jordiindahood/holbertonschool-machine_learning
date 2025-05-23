@@ -11,6 +11,7 @@ class GaussianProcess:
         """
         Constructor for the GaussianProcess class
         """
+
         self.X = X_init
         self.Y = Y_init
         self.l = l
