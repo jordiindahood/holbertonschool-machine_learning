@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+"""script 7"""
+
 import tensorflow as tf
 from tensorflow.keras.layers import Layer, Dense, Dropout, LayerNormalization
 
@@ -5,7 +9,10 @@ MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
 
 
 class EncoderBlock(Layer):
+    """EncoderBlock"""
+
     def __init__(self, dm, h, hidden, drop_rate=0.1):
+        """init"""
         super(EncoderBlock, self).__init__()
         self.mha = MultiHeadAttention(dm, h)
         self.dense_hidden = Dense(hidden, activation='relu')
@@ -16,12 +23,11 @@ class EncoderBlock(Layer):
         self.dropout2 = Dropout(drop_rate)
 
     def call(self, x, training=False, mask=None):
-        # Multi-head self-attention
+        """call"""
         attn_output, _ = self.mha(x, x, x, mask)
         attn_output = self.dropout1(attn_output, training=training)
         out1 = self.layernorm1(x + attn_output)
 
-        # Feed-forward network
         ffn_output = self.dense_hidden(out1)
         ffn_output = self.dense_output(ffn_output)
         ffn_output = self.dropout2(ffn_output, training=training)
@@ -30,7 +36,7 @@ class EncoderBlock(Layer):
         return out2
 
     def __call__(self, *args, **kwargs):
-        # Allow positional argument unpacking: (x, training, mask)
+        """Allow positional argument unpacking: (x, training, mask)"""
         if len(args) == 3:
             x, training, mask = args
             return super().__call__(x, training=training, mask=mask)
