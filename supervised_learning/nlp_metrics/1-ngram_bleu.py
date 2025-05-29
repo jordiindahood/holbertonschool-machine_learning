@@ -11,7 +11,7 @@ def ngram_bleu(references, sentence, n):
     """
 
     def ngrams(seq, n):
-        return [tuple(seq[i : i + n]) for i in range(len(seq) - n + 1)]
+        return [tuple(seq[i: i + n]) for i in range(len(seq) - n + 1)]
 
     sentence_ngrams = ngrams(sentence, n)
     sentence_counts = Counter(sentence_ngrams)
