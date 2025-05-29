@@ -33,7 +33,9 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         return tf.transpose(x, perm=[0, 2, 1, 3])
 
     def call(self, Q, K, V, mask):
-        """call"""
+        """
+        call
+        """
         batch_size = tf.shape(Q)[0]
 
         Q = self.Wq(Q)
