@@ -2,6 +2,7 @@
 """RNN Decoder with Self-Attention"""
 
 import tensorflow as tf
+
 SelfAttention = __import__('1-self_attention').SelfAttention
 
 
@@ -14,15 +15,14 @@ class RNNDecoder(tf.keras.layers.Layer):
         self.units = units
 
         self.embedding = tf.keras.layers.Embedding(
-            input_dim=vocab,
-            output_dim=embedding
+            input_dim=vocab, output_dim=embedding
         )
 
         self.gru = tf.keras.layers.GRU(
             units=units,
             return_sequences=True,
             return_state=True,
-            recurrent_initializer='glorot_uniform'
+            recurrent_initializer='glorot_uniform',
         )
 
         self.F = tf.keras.layers.Dense(vocab)
@@ -44,7 +44,9 @@ class RNNDecoder(tf.keras.layers.Layer):
         x = tf.concat([context, x], axis=-1)  # (batch, 1, units + embedding)
 
         # Pass through GRU
-        output, state = self.gru(x, initial_state=s_prev)  # output: (batch, 1, units)
+        output, state = self.gru(
+            x, initial_state=s_prev
+        )  # output: (batch, 1, units)
 
         # Remove time dimension from GRU output
         output = output[:, 0, :]  # (batch, units)
