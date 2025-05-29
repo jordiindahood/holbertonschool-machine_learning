@@ -22,7 +22,9 @@ class EncoderBlock(tf.keras.layers.Layer):
         self.dropout2 = tf.keras.layers.Dropout(drop_rate)
 
     def call(self, x, training=False, mask=None):
-        """call"""
+        """
+        call
+        """
         attn_output, _ = self.mha(x, x, x, mask)
         attn_output = self.dropout1(attn_output, training=training)
         out1 = self.layernorm1(x + attn_output)
@@ -35,7 +37,9 @@ class EncoderBlock(tf.keras.layers.Layer):
         return out2
 
     def __call__(self, *args, **kwargs):
-        """Allow positional argument unpacking: (x, training, mask)"""
+        """
+        Allow positional argument unpacking: (x, training, mask)
+        """
         if len(args) == 3:
             x, training, mask = args
             return super().__call__(x, training=training, mask=mask)
