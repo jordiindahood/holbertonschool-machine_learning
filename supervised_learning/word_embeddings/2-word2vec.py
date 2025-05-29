@@ -2,8 +2,6 @@
 """script 2"""
 
 import gensim
-import random
-import numpy as np
 
 
 def word2vec_model(
@@ -20,9 +18,6 @@ def word2vec_model(
     """
     Trains a Word2Vec model on the given sentences.
     """
-    random.seed(seed)
-    np.random.seed(seed)
-
     sg = 0 if cbow else 1
 
     model = gensim.models.Word2Vec(
