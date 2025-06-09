@@ -57,15 +57,18 @@ class Dataset:
         )
         return tokenizer_pt, tokenizer_en
 
-
     def encode(self, pt, en):
         """
         encode
         """
-        pt_tokens = [self.tokenizer_pt.vocab_size] + \
-            self.tokenizer_pt.encode(pt.numpy().decode('utf-8')) + \
-            [self.tokenizer_pt.vocab_size + 1]
-        en_tokens = [self.tokenizer_en.vocab_size] + \
-            self.tokenizer_en.encode(en.numpy().decode('utf-8')) + \
-            [self.tokenizer_en.vocab_size + 1]
+        pt_tokens = (
+            [self.tokenizer_pt.vocab_size]
+            + self.tokenizer_pt.encode(pt.numpy().decode('utf-8'))
+            + [self.tokenizer_pt.vocab_size + 1]
+        )
+        en_tokens = (
+            [self.tokenizer_en.vocab_size]
+            + self.tokenizer_en.encode(en.numpy().decode('utf-8'))
+            + [self.tokenizer_en.vocab_size + 1]
+        )
         return pt_tokens, en_tokens
