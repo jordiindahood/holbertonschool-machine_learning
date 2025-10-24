@@ -19,7 +19,7 @@ def left_child_add_prefix(text):
     lines = text.split("\n")
     new_text = "    +--" + lines[0] + "\n"
     for x in lines[1:]:
-        new_text += ("    |  " + x) + "\n"
+        new_text += ("    |  "+x) + "\n"
     return new_text
 
 
@@ -70,15 +70,8 @@ class Node:
         Calculates the maximum depth of the subtree rooted at this node.
     """
 
-    def __init__(
-        self,
-        feature=None,
-        threshold=None,
-        left_child=None,
-        right_child=None,
-        is_root=False,
-        depth=0,
-    ):
+    def __init__(self, feature=None, threshold=None,
+                 left_child=None, right_child=None, is_root=False, depth=0):
         """
         Initializes a Node with the given parameters.
 
@@ -236,10 +229,8 @@ class Node:
                 A 1D NumPy array of boolean values
                 indicating if each individual meets the condition.
             """
-            return np.all(
-                np.array([x[:, key] > self.lower[key] for key in self.lower.keys()]),
-                axis=0,
-            )
+            return np.all(np.array([x[:, key] > self.lower[key]
+                                    for key in self.lower.keys()]), axis=0)
 
         def is_small_enough(x):
             """
@@ -255,14 +246,11 @@ class Node:
                 A 1D NumPy array of boolean values indicating
                 if each individual meets the condition.
             """
-            return np.all(
-                np.array([x[:, key] <= self.upper[key] for key in self.upper.keys()]),
-                axis=0,
-            )
+            return np.all(np.array([x[:, key] <= self.upper[key]
+                                    for key in self.upper.keys()]), axis=0)
 
-        self.indicator = lambda x: np.all(
-            np.array([is_large_enough(x), is_small_enough(x)]), axis=0
-        )
+        self.indicator = lambda x: \
+            np.all(np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
 
     def pred(self, x):
         """
@@ -346,7 +334,7 @@ class Leaf(Node):
         str
             The string representation of the leaf node.
         """
-        return f"-> leaf [value={self.value}]"
+        return (f"-> leaf [value={self.value}]")
 
     def get_leaves_below(self):
         """
@@ -381,7 +369,7 @@ class Leaf(Node):
         return self.value
 
 
-class Decision_Tree:
+class Decision_Tree():
     """
     A class representing a decision tree.
 
@@ -408,16 +396,22 @@ class Decision_Tree:
         Returns the maximum depth of the tree.
     """
 
-    def __init__(
-        self,
-        max_depth=10,
-        min_pop=1,
-        seed=0,
-        split_criterion="random",
-        root=None
-    ):
+    def __init__(self, max_depth=10, min_pop=1, seed=0,
+                 split_criterion="random", root=None):
         """
         Initializes a Decision_Tree with the given parameters.
+
+        Parameters:
+        max_depth : int, optional
+            The maximum depth of the tree (default is 10).
+        min_pop : int, optional
+            The minimum population required to split a node (default is 1).
+        seed : int, optional
+            Seed for the random number generator (default is 0).
+        split_criterion : str, optional
+            The criterion used to split nodes (default is "random").
+        root : Node or None, optional
+            The root node of the tree (default is None).
         """
         self.rng = np.random.default_rng(seed)
         if root:
@@ -434,24 +428,44 @@ class Decision_Tree:
     def depth(self):
         """
         Returns the maximum depth of the tree.
+
+        Returns:
+        int
+            The maximum depth of the tree.
         """
         return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
         """
         Counts the number of nodes in the decision tree.
+
+        Parameters:
+        only_leaves : bool, optional
+            If True, count only the leaf nodes (default is False).
+
+        Returns:
+        int
+            The number of nodes in the tree.
         """
         return self.root.count_nodes_below(only_leaves=only_leaves)
 
     def __str__(self):
         """
         Returns a string representation of the decision tree.
+
+        Returns:
+        str
+            The string representation of the decision tree.
         """
         return self.root.__str__() + "\n"
 
     def get_leaves(self):
         """
         Returns a list of all leaves in the tree.
+
+        Returns:
+        list
+            The list of all leaves in the tree.
         """
         return self.root.get_leaves_below()
 
@@ -475,6 +489,18 @@ class Decision_Tree:
             """
             Predict the class for each individual in the input
             array A using the decision tree.
+
+            Parameters:
+            A : np.ndarray
+                A 2D NumPy array of shape (n_individuals,
+                n_features), where each row
+                represents an individual with its features.
+
+            Returns:
+            np.ndarray
+                A 1D NumPy array of shape (n_individuals,),
+                where each element is the predicted
+                class for the corresponding individual in A.
             """
             predictions = np.zeros(A.shape[0], dtype=int)
             for i, x in enumerate(A):
@@ -483,40 +509,70 @@ class Decision_Tree:
                         predictions[i] = leaf.value
                         break
             return predictions
-
         self.predict = predict
 
     def pred(self, x):
         """
         Predict the class for a single individual using the decision tree.
-        The predicted class for the individual.
+
+        Parameters:
+        x : np.ndarray
+            A 1D NumPy array representing the features of a single individual.
+
+        Returns:
+        int
+            The predicted class for the individual.
         """
         return self.root.pred(x)
 
     def np_extrema(self, arr):
         """
         Returns the minimum and maximum values of the array.
+
+        Parameters:
+        arr : array-like
+            The input array.
+
+        Returns:
+        tuple
+            A tuple containing the minimum and maximum values of the array.
         """
         return np.min(arr), np.max(arr)
 
     def random_split_criterion(self, node):
         """
         Determines a random split criterion for a given node.
+
+        Parameters
+        node : Node
+            The node for which the split criterion is determined.
+
+        Returns
+        tuple
+            A tuple containing the feature index and the threshold value.
         """
         diff = 0
         while diff == 0:
             feature = self.rng.integers(0, self.explanatory.shape[1])
-            feature_min, feature_max = self.np_extrema(
-                self.explanatory[:, feature][node.sub_population]
-            )
-            diff = feature_max - feature_min
+            feature_min, feature_max = self.np_extrema(self.explanatory
+                                                       [:, feature]
+                                                       [node.sub_population])
+            diff = feature_max-feature_min
         x = self.rng.uniform()
-        threshold = (1 - x) * feature_min + x * feature_max
+        threshold = (1-x)*feature_min + x * feature_max
         return feature, threshold
 
     def fit(self, explanatory, target, verbose=0):
         """
         Fits the decision tree to the provided explanatory and target data.
+
+        Parameters
+        explanatory : array-like
+            The explanatory variables.
+        target : array-like
+            The target variable.
+        verbose : int, optional
+            If set to 1, prints training details (default is 0).
         """
         if self.split_criterion == "random":
             self.split_criterion = self.random_split_criterion
@@ -525,58 +581,49 @@ class Decision_Tree:
 
         self.explanatory = explanatory
         self.target = target
-        self.root.sub_population = np.ones_like(self.target, dtype="bool")
+        self.root.sub_population = np.ones_like(self.target, dtype='bool')
 
         self.fit_node(self.root)
 
         self.update_predict()
 
         if verbose == 1:
-            print(
-                f"""  Training finished.
+            print(f"""  Training finished.
     - Depth                     : {self.depth()}
     - Number of nodes           : {self.count_nodes()}
-    - Number of leaves          : {self.count_nodes(only_leaves=True)}"""
-            )
-            print(
-                f"    - Accuracy on training data : "
-                f"{self.accuracy(self.explanatory, self.target)}"
-            )
+    - Number of leaves          : {self.count_nodes(only_leaves=True)}""")
+            print(f"    - Accuracy on training data : "
+                  f"{self.accuracy(self.explanatory, self.target)}")
 
     def fit_node(self, node):
         """
         Recursively fits the decision tree nodes.
+
+        Parameters
+        node : Node
+            The current node being fitted.
         """
         node.feature, node.threshold = self.split_criterion(node)
 
-        left_population = node.sub_population & (
-            self.explanatory[:, node.feature] > node.threshold
-        )
+        left_population = node.sub_population & \
+            (self.explanatory[:, node.feature] > node.threshold)
         right_population = node.sub_population & ~left_population
         if len(left_population) != len(self.target):
-            left_population = np.pad(
-                left_population,
-                (0, len(self.target) - len(self.left_population)),
-                "constant",
-                constant_values=(0),
-            )
+            left_population = np.pad(left_population,
+                                     (0, len(self.target) -
+                                      len(self.left_population)),
+                                     'constant', constant_values=(0))
         if len(right_population) != len(self.target):
-            right_population = np.pad(
-                right_population,
-                (0, len(self.target) - len(self.right_population)),
-                "constant",
-                constant_values=(0),
-            )
-        is_left_leaf = (
-            node.depth == self.max_depth - 1
-            or np.sum(left_population) <= self.min_pop
-            or np.unique(self.target[left_population]).size == 1
-        )
-        is_right_leaf = (
-            node.depth == self.max_depth - 1
-            or np.sum(right_population) <= self.min_pop
-            or np.unique(self.target[right_population]).size == 1
-        )
+            right_population = np.pad(right_population,
+                                      (0, len(self.target) -
+                                       len(self.right_population)),
+                                      'constant', constant_values=(0))
+        is_left_leaf = (node.depth == self.max_depth - 1 or
+                        np.sum(left_population) <= self.min_pop or
+                        np.unique(self.target[left_population]).size == 1)
+        is_right_leaf = (node.depth == self.max_depth - 1 or
+                         np.sum(right_population) <= self.min_pop or
+                         np.unique(self.target[right_population]).size == 1)
         if is_left_leaf:
             node.left_child = self.get_leaf_child(node, left_population)
         else:
@@ -594,6 +641,16 @@ class Decision_Tree:
     def get_leaf_child(self, node, sub_population):
         """
         Creates a leaf child node.
+
+        Parameters
+        node : Node
+            The parent node.
+        sub_population : array-like
+            The sub-population for the leaf node.
+
+        Returns
+        Leaf
+            The created leaf node.
         """
         value = np.argmax(np.bincount(self.target[sub_population]))
         leaf_child = Leaf(value)
@@ -604,6 +661,16 @@ class Decision_Tree:
     def get_node_child(self, node, sub_population):
         """
         Creates a leaf child node.
+
+        Parameters
+        node : Node
+            The parent node.
+        sub_population : array-like
+            The sub-population for the leaf node.
+
+        Returns
+        Leaf
+            The created leaf node.
         """
         A = self.target[sub_population]
         B, C = np.unique(A, return_counts=True)
@@ -616,6 +683,16 @@ class Decision_Tree:
     def get_node_child(self, node, sub_population):
         """
         Creates a non-leaf child node.
+
+        Parameters
+        node : Node
+            The parent node.
+        sub_population : array-like
+            The sub-population for the child node.
+
+        Returns
+        Node
+            The created non-leaf child node.
         """
         n = Node()
         n.depth = node.depth + 1
@@ -625,8 +702,16 @@ class Decision_Tree:
     def accuracy(self, test_explanatory, test_target):
         """
         Calculates the accuracy of the decision tree on the test data.
+
+        Parameters
+        test_explanatory : array-like
+            The explanatory variables for the test data.
+        test_target : array-like
+            The target variable for the test data.
+
+        Returns
+        float
+            The accuracy of the decision tree on the test data.
         """
-        return (
-            np.sum(np.equal(self.predict(test_explanatory), test_target))
-            / test_target.size
-        )
+        return np.sum(np.equal(self.predict(test_explanatory),
+                               test_target))/test_target.size
