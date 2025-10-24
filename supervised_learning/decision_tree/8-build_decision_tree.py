@@ -1,46 +1,6 @@
 #!/usr/bin/env python3
-""" Task 7: 7. Training decision trees"""
+""" Task 8: 8. Using Gini impurity function as a splitting criterion """
 import numpy as np
-
-
-def left_child_add_prefix(text):
-    """
-    Adds a prefix to each line of the text to
-    indicate it is the left child in the tree structure.
-
-    Parameters:
-    text : str
-        The text to which the prefix will be added.
-
-    Returns:
-    str
-        The text with the left child prefix added to each line.
-    """
-    lines = text.split("\n")
-    new_text = "    +--" + lines[0] + "\n"
-    for x in lines[1:]:
-        new_text += ("    |  "+x) + "\n"
-    return new_text
-
-
-def right_child_add_prefix(text):
-    """
-    Adds a prefix to each line of the text to indicate
-    it is the right child in the tree structure.
-
-    Parameters:
-    text : str
-        The text to which the prefix will be added.
-
-    Returns:
-    str
-        The text with the right child prefix added to each line.
-    """
-    lines = text.split("\n")
-    new_text = "    +--" + lines[0] + "\n"
-    for x in lines[1:]:
-        new_text += ("       " + x) + "\n"
-    return new_text
 
 
 class Node:
@@ -144,6 +104,44 @@ class Node:
             return left_count + right_count
         return 1 + left_count + right_count
 
+    def left_child_add_prefix(self, text):
+        """
+        Adds a prefix to each line of the text to
+        indicate it is the left child in the tree structure.
+
+        Parameters:
+        text : str
+            The text to which the prefix will be added.
+
+        Returns:
+        str
+            The text with the left child prefix added to each line.
+        """
+        lines = text.split("\n")
+        new_text = "    +--"+lines[0]+"\n"
+        for x in lines[1:]:
+            new_text += ("    |  "+x)+"\n"
+        return (new_text)
+
+    def right_child_add_prefix(self, text):
+        """
+        Adds a prefix to each line of the text to indicate
+        it is the right child in the tree structure.
+
+        Parameters:
+        text : str
+            The text to which the prefix will be added.
+
+        Returns:
+        str
+            The text with the right child prefix added to each line.
+        """
+        lines = text.split("\n")
+        new_text = "    +--"+lines[0]+"\n"
+        for x in lines[1:]:
+            new_text += ("       "+x)+"\n"
+        return (new_text.rstrip())
+
     def __str__(self):
         """
         Returns a string representation of the node and its children.
@@ -153,21 +151,12 @@ class Node:
             The string representation of the node.
         """
         if self.is_root:
-            Type = "root "
-        elif self.is_leaf:
-            return f"-> leaf [value={self.value}]"
+            t = "root"
         else:
-            Type = "-> node "
-        if self.left_child:
-            left_str = left_child_add_prefix(str(self.left_child))
-        else:
-            left_str = ""
-        if self.right_child:
-            right_str = right_child_add_prefix(str(self.right_child))
-        else:
-            right_str = ""
-        return f"{Type}[feature={self.feature}, threshold=\
-{self.threshold}]\n{left_str}{right_str}".rstrip()
+            t = "-> node"
+        return f"{t} [feature={self.feature}, threshold={self.threshold}]\n"\
+            + self.left_child_add_prefix(str(self.left_child))\
+            + self.right_child_add_prefix(str(self.right_child))
 
     def get_leaves_below(self):
         """
@@ -177,14 +166,9 @@ class Node:
         list
             The list of all leaves below this node.
         """
-        if self.is_leaf:
-            return [self]
-        leaves = []
-        if self.left_child:
-            leaves.extend(self.left_child.get_leaves_below())
-        if self.right_child:
-            leaves.extend(self.right_child.get_leaves_below())
-        return leaves
+        left_leaves = self.left_child.get_leaves_below()
+        right_leaves = self.right_child.get_leaves_below()
+        return left_leaves + right_leaves
 
     def update_bounds_below(self):
         """
@@ -264,8 +248,6 @@ class Node:
         int
             The predicted class for the individual.
         """
-        if self.is_leaf:
-            return self.value
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
         else:
@@ -484,32 +466,10 @@ class Decision_Tree():
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
-
-        def predict(A):
-            """
-            Predict the class for each individual in the input
-            array A using the decision tree.
-
-            Parameters:
-            A : np.ndarray
-                A 2D NumPy array of shape (n_individuals,
-                n_features), where each row
-                represents an individual with its features.
-
-            Returns:
-            np.ndarray
-                A 1D NumPy array of shape (n_individuals,),
-                where each element is the predicted
-                class for the corresponding individual in A.
-            """
-            predictions = np.zeros(A.shape[0], dtype=int)
-            for i, x in enumerate(A):
-                for leaf in leaves:
-                    if leaf.indicator(np.array([x])):
-                        predictions[i] = leaf.value
-                        break
-            return predictions
-        self.predict = predict
+        self.predict = lambda A: np.sum(
+            np.array([leaf.indicator(A) * leaf.value for leaf in leaves]),
+            axis=0
+        )
 
     def pred(self, x):
         """
@@ -702,9 +662,38 @@ class Decision_Tree():
     def accuracy(self, test_explanatory, test_target):
         """
         Calculates the accuracy of the decision tree on the test data.
+
+        Parameters
+        test_explanatory : array-like
+            The explanatory variables for the test data.
+        test_target : array-like
+            The target variable for the test data.
+
+        Returns
+        float
+            The accuracy of the decision tree on the test data.
         """
         return np.sum(np.equal(self.predict(test_explanatory),
                                test_target))/test_target.size
+
+    def possible_thresholds(self, node, feature):
+        """
+        Calculate possible thresholds for splitting a decision
+        tree node based on a specific feature.
+
+        Parameters:
+        node : Node
+            The decision tree node for which thresholds are to be calculated.
+        feature : int
+            The index of the feature (column) in the explanatory
+            variables (features) of the dataset.
+
+        Returns:
+        numpy.ndarray
+            A 1D array containing possible thresholds for splitting the node.
+        """
+        values = np.unique((self.explanatory[:, feature])[node.sub_population])
+        return (values[1:] + values[:-1]) / 2
 
     def Gini_split_criterion_one_feature(self, node, feature):
         """
@@ -712,6 +701,17 @@ class Decision_Tree():
         thresholds of a given feature and return the threshold
         that minimizes the Gini impurity along with the corresponding
         impurity value.
+
+        Parameters:
+        node : Node
+            The decision tree node for which Gini impurity is to be calculated.
+        feature : int
+            The index of the feature to evaluate.
+
+        Returns:
+        numpy.ndarray
+            A 1D array containing the best threshold and
+            the corresponding minimum Gini impurity value.
         """
         thresholds = self.possible_thresholds(node, feature)
         indices = np.arange(self.explanatory.shape[0])[node.sub_population]
@@ -745,6 +745,19 @@ class Decision_Tree():
         """
         Determine the best feature and its associated
         Gini impurity for splitting a decision tree node.
+
+        Parameters:
+        node : Node
+            The decision tree node for which the Gini
+            split criterion is to be calculated.
+
+        Returns:
+        tuple (int, float)
+            A tuple where:
+            - The first element is the index of the feature
+            that results in the best (lowest) Gini impurity split.
+            - The second element is the Gini impurity
+            value associated with that best split.
         """
         X = np.array([self.Gini_split_criterion_one_feature(node, i)
                       for i in range(self.explanatory.shape[1])])
