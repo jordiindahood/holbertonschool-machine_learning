@@ -144,8 +144,7 @@ class Node:
             its so big omg
             """
             return np.all(
-                np.array([
-                    x[:, key] > self.lower[key] for key in self.lower.keys()]),
+                np.array([x[:, key] > self.lower[key] for key in self.lower.keys()]),
                 axis=0,
             )
 
@@ -154,8 +153,7 @@ class Node:
             is smol
             """
             return np.all(
-                np.array([x[
-                    :, key] <= self.upper[key] for key in self.upper.keys()]),
+                np.array([x[:, key] <= self.upper[key] for key in self.upper.keys()]),
                 axis=0,
             )
 
@@ -228,8 +226,7 @@ class Decision_Tree:
     """
 
     def __init__(
-        self, max_depth=10, min_pop=1,
-        seed=0, split_criterion="random", root=None
+        self, max_depth=10, min_pop=1, seed=0, split_criterion="random", root=None
     ):
         """
         init
@@ -283,8 +280,7 @@ class Decision_Tree:
         for leaf in leaves:
             leaf.update_indicator()
         self.predict = lambda A: [
-            leaf.value
-            for x in A for leaf in leaves if leaf.indicator(np.array([x]))
+            leaf.value for x in A for leaf in leaves if leaf.indicator(np.array([x]))
         ]
 
     def pred(self, x):
