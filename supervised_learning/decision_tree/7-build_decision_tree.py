@@ -427,8 +427,8 @@ class Decision_Tree():
 
     def depth(self):
         """
-        Returns the maximum depth of the tree.
-        """
+        Returns the maximum depth of the tree. 
+       """
         return self.root.max_depth_below()
 
     def count_nodes(self, only_leaves=False):
