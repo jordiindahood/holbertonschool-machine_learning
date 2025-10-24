@@ -409,22 +409,15 @@ class Decision_Tree:
     """
 
     def __init__(
-        self, max_depth=10, min_pop=1, seed=0, split_criterion="random", root=None
+        self,
+        max_depth=10,
+        min_pop=1,
+        seed=0,
+        split_criterion="random",
+        root=None
     ):
         """
         Initializes a Decision_Tree with the given parameters.
-
-        Parameters:
-        max_depth : int, optional
-            The maximum depth of the tree (default is 10).
-        min_pop : int, optional
-            The minimum population required to split a node (default is 1).
-        seed : int, optional
-            Seed for the random number generator (default is 0).
-        split_criterion : str, optional
-            The criterion used to split nodes (default is "random").
-        root : Node or None, optional
-            The root node of the tree (default is None).
         """
         self.rng = np.random.default_rng(seed)
         if root:
