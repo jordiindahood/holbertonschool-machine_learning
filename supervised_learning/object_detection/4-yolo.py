@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-
-"""script 1"""
-
+""" Task 4: 4. Load images"""
 import tensorflow.keras as K
 import numpy as np
+import glob
+import cv2
 
 
 class Yolo:
@@ -12,14 +12,13 @@ class Yolo:
     It initializes with the necessary configurations and loads
     the pre-trained model.
     """
-
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """
         Initializes the Yolo class with the provided model,
         class names, and thresholds.
         """
         self.model = K.models.load_model(model_path)
-        with open(classes_path, "r") as f:
+        with open(classes_path, 'r') as f:
             self.class_names = [line.strip() for line in f]
         self.class_t = class_t
         self.nms_t = nms_t
@@ -29,13 +28,12 @@ class Yolo:
         """
         Apply the sigmoid activation function.
         """
-        return 1 / (1 + np.exp(-x))
+        return (1 / (1 + np.exp(-x)))
 
     def process_outputs(self, outputs, image_size):
         """
         Process the outputs from the YOLO model.
         """
-
         boxes = []
         for i in range(len(outputs)):
             boxes_i = outputs[i][..., 0:4]
@@ -109,36 +107,51 @@ class Yolo:
         index_arg_max = []
         box_classes = []
 
+        # 1. Multiply confidence x probs to find real confidence of each class
         for bc_i, probs_j in zip(box_confidences, box_class_probs):
             scores.append(bc_i * probs_j)
 
+        # 2. find temporal indices de clas cajas con los arg mas altos
         for score in scores:
             index_arg_max = np.argmax(score, axis=-1)
+            # -1 = last dimension)
 
+            # 3. Flatten each array
             index_arg_max_flat = index_arg_max.flatten()
 
+            # 4. Everything in one single array
             classes.append(index_arg_max_flat)
 
+            # find the values
             score_max = np.max(score, axis=-1)
             score_max_flat = score_max.flatten()
             box_classes_scores.append(score_max_flat)
 
         boxes = [box.reshape(-1, 4) for box in boxes]
+        # (13, 13, 3, 4) ----> (507, 4)
 
         box_classes = np.concatenate(classes, axis=-1)
+        # -1 = add to the end
+
         box_classes_scores = np.concatenate(box_classes_scores, axis=-1)
+        # -1 = add to the end
 
         boxes = np.concatenate(boxes, axis=0)
 
+        # filtro
+        # boxes[box_classes_scores >= self.class_t]
         filtro = np.where(box_classes_scores >= self.class_t)
 
         return (boxes[filtro], box_classes[filtro], box_classes_scores[filtro])
 
     def iou(self, x1, x2, y1, y2, pos1, pos2, area):
         """
-        Calculates the Intersection over Union (IoU) between two boxes.
+    Calculates the Intersection over Union (IoU) between two bounding boxes.
+
+    representing the ratio of overlap to the total area covered by both boxes.
         """
 
+        # find the coordinates
         a = np.maximum(x1[pos1], x1[pos2])
         b = np.maximum(y1[pos1], y1[pos2])
 
@@ -148,11 +161,12 @@ class Yolo:
         height = np.maximum(0.0, d - b)
         width = np.maximum(0.0, c - a)
 
-        intersection = width * height
+        # overlap ratio betw bounding box
+        intersection = (width * height)
         union = area[pos1] + area[pos2] - intersection
-        result = intersection / union
+        iou = intersection / union
 
-        return result
+        return iou
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
@@ -167,24 +181,29 @@ class Yolo:
         for classes in set(box_classes):
             index = np.where(box_classes == classes)
 
+            # function arrays
             filtered = filtered_boxes[index]
             scores = box_scores[index]
             classe = box_classes[index]
 
+            # coordinates of the bounding boxes
             x1 = filtered[:, 0]
             y1 = filtered[:, 1]
             x2 = filtered[:, 2]
             y2 = filtered[:, 3]
 
+            # calculate area of the bounding boxes and sort from high to low
             area = (x2 - x1) * (y2 - y1)
             index_list = np.flip(scores.argsort(), axis=0)
 
+            # loop remaining indexes to hold list of picked indexes
             keep = []
-            while len(index_list) > 0:
+            while (len(index_list) > 0):
                 pos1 = index_list[0]
                 pos2 = index_list[1:]
                 keep.append(pos1)
 
+                # find the intersection over union %
                 iou = self.iou(x1, x2, y1, y2, pos1, pos2, area)
 
                 below_threshold = np.where(iou <= self.nms_t)[0]
@@ -203,6 +222,7 @@ class Yolo:
 
         return (box_predictions, predicted_box_classes, predicted_box_scores)
 
+    @staticmethod
     def load_images(folder_path):
         """
         Loads all images from a specified folder.
