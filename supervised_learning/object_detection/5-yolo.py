@@ -245,26 +245,24 @@ class Yolo:
         input_h = self.model.input.shape[2]
 
         # Initialize output containers
-        pimages = []
-        image_shapes = []
+        dims = []
+        res_images = []
 
-        for img in images:
-            # Store original size
-            image_shapes.append(img.shape[:2])  # (height, width)
+        input_h = self.model.input.shape[1]
+        input_w = self.model.input.shape[2]
+        for image in images:
+            dims.append(image.shape[:2])
 
-            # Resize with inter-cubic interpolation
-            resized = K.preprocessing.image.smart_resize(
-                img,
-                (input_h, input_w),
-                interpolation='bicubic')
+        dims = np.stack(dims, axis=0)
 
-            # Rescale pixel values to [0, 1]
-            normalized = resized / 255.0
+        newtam = (input_h, input_w)
 
-            pimages.append(normalized)
+        interpolation = cv2.INTER_CUBIC
+        for image in images:
+            resize_img = cv2.resize(image, newtam, interpolation=interpolation)
+            resize_img = resize_img / 255
+            res_images.append(resize_img)
 
-        # Convert to numpy arrays
-        pimages = np.array(pimages)
-        image_shapes = np.array(image_shapes)
+        res_images = np.stack(res_images, axis=0)
 
-        return (pimages, image_shapes)
+        return (res_images, dims)
