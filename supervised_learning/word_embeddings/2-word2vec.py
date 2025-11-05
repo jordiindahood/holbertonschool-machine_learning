@@ -1,25 +1,35 @@
 #!/usr/bin/env python3
-""" Task 2: 2. Train Word2Vec """
+"""Function to create, build, and train a Word2Vec model using gensim"""
+
 import gensim
 
 
-def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
-                   negative=5, cbow=True, epochs=5, seed=0, workers=1):
+def word2vec_model(
+    sentences,
+    vector_size=100,
+    min_count=5,
+    window=5,
+    negative=5,
+    cbow=True,
+    epochs=5,
+    seed=0,
+    workers=1,
+):
     """
-    Trains a Word2Vec model on the given sentences.
+    Creates, builds, and trains a gensim Word2Vec model.
     """
-    sg = 0 if cbow else 1
+    sg = 0 if cbow else 1  # 0 = CBOW, 1 = Skip-gram
 
     model = gensim.models.Word2Vec(
         sentences=sentences,
         vector_size=vector_size,
         window=window,
         min_count=min_count,
-        sg=sg,
         negative=negative,
+        sg=sg,
         seed=seed,
         workers=workers,
-        epochs=epochs
     )
 
+    model.train(sentences, total_examples=len(sentences), epochs=epochs)
     return model
