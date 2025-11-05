@@ -1,20 +1,10 @@
 #!/usr/bin/env python3
-"""script 2"""
-
+""" Task 2: 2. Train Word2Vec """
 import gensim
 
 
-def word2vec_model(
-    sentences,
-    vector_size=100,
-    min_count=5,
-    window=5,
-    negative=5,
-    cbow=True,
-    epochs=5,
-    seed=0,
-    workers=1,
-):
+def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
+                   negative=5, cbow=True, epochs=5, seed=0, workers=1):
     """
     Trains a Word2Vec model on the given sentences.
     """
@@ -29,7 +19,7 @@ def word2vec_model(
         negative=negative,
         seed=seed,
         workers=workers,
-        epochs=epochs,
+        epochs=epochs
     )
 
     return model
