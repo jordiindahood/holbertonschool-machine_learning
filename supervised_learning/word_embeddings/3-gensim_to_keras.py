@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Convert a trained gensim Word2Vec model to a Keras Embedding layer"""
 
-import numpy as np
 import tensorflow
 
 
