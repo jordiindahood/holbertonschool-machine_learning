@@ -13,7 +13,10 @@ def gensim_to_keras(model):
     vocab_size, vector_size = weights.shape
 
     embedding_layer = tensorflow.keras.layers.Embedding(
-        input_dim=vocab_size, output_dim=vector_size, weights=[weights], trainable=True
+        input_dim=vocab_size,
+        output_dim=vector_size,
+        weights=[weights],
+        trainable=True,
     )
 
     return embedding_layer
