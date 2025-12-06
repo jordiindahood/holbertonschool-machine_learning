@@ -48,4 +48,4 @@ def get_first_launch():
 
 
 if __name__ == "__main__":
-    get_first_
+    get_first_launch()
