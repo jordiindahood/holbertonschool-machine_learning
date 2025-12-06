@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """ script 4 """
-import numpy as np
-
 
 def array(df):
     """Selects the last 10 rows of High and Close columns
