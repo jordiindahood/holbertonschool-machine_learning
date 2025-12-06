@@ -8,4 +8,3 @@ def prune(df):
     Returns the modified DataFrame.
     """
     return df.dropna(subset=['Close'])
-    
