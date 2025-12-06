@@ -31,3 +31,8 @@ def sentientPlanets():
                         planets.add(hw_data.get("name", "unknown"))
                     else:
                         planets.add("unknown")
+                else:
+                    planets.add("unknown")
+        url = data.get("next")  # pagination
+
+    return list(planets)
