@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """ script 13 """
 
-import pandas as pd
-
 
 def analyze(df):
     """
