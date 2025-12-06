@@ -6,7 +6,6 @@ import requests
 
 def availableShips(passengerCount):
     """
-    Returns a list of starships that can hold at least passengerCount passengers.
     Uses SWAPI API and handles pagination.
     """
 
