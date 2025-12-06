@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
+""" script 1 """
+
 import requests
 
 
 def sentientPlanets():
     """
     Returns a list of names of home planets of all sentient species.
-    Sentient species are identified if 'sentient' is in 
+    Sentient species are identified if 'sentient' is in
     classification or designation.
     """
 
