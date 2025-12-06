@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """ script 5 """
-import pandas as pd
 
 
 def slice(df):
