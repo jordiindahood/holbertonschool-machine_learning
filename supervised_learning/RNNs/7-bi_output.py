@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 7 """
+""" script 7 """
 
 import numpy as np
 
