@@ -194,20 +194,25 @@ class NST:
         gram_target: tf.Tensor of shape (1, c, c) for the target style
         """
 
-        if not isinstance(style_output, (tf.Tensor, tf.Variable)) or style_output.ndim != 4:
+        if (
+            not isinstance(style_output, (tf.Tensor, tf.Variable))
+            or style_output.ndim != 4
+        ):
             raise TypeError("style_output must be a tensor of rank 4")
 
         _, _, _, c = style_output.shape
 
-        if not isinstance(gram_target, (tf.Tensor, tf.Variable)) or gram_target.shape != (1, c, c):
+        if not isinstance(
+            gram_target, (tf.Tensor, tf.Variable)
+        ) or gram_target.shape != (1, c, c):
             raise TypeError(
-                f"gram_target must be a tensor of shape [1, {c}, {c}] where {c} is the number of channels in style_output"
+                f"gram_target must be a tensor of shape [1, {c}, {c}]"
             )
 
         # Compute Gram matrix of the style output
         gram_style = self.gram_matrix(style_output)
 
         # Compute squared difference and normalize by C_l^2
-        cost = tf.reduce_sum(tf.square(gram_style - gram_target)) / (c ** 2)
+        cost = tf.reduce_sum(tf.square(gram_style - gram_target)) / (c**2)
 
         return cost
