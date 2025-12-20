@@ -183,7 +183,7 @@ class NST:
 
         self.model = model_avg
 
-    def gram_matrix(input_layer):
+    def gram_matrix(self,input_layer):
         """Calculates the Gram matrix of a layer"""
 
         # Validate input
