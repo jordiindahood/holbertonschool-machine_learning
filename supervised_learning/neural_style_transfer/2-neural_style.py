@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 1 : 1. Load the Model """
+""" Task 2 : 2. Gram Matrix """
 import numpy as np
 import tensorflow as tf
 
@@ -24,13 +24,8 @@ class NST:
         Weight for style loss.
     """
 
-    style_layers = [
-        'block1_conv1',
-        'block2_conv1',
-        'block3_conv1',
-        'block4_conv1',
-        'block5_conv1',
-    ]
+    style_layers = ['block1_conv1', 'block2_conv1', 'block3_conv1',
+                    'block4_conv1', 'block5_conv1']
     content_layer = 'block5_conv2'
 
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
@@ -53,24 +48,17 @@ class NST:
             ndarrays or don't have shape (h, w, 3).
             TypeError: If alpha or beta are not non-negative numbers.
         """
-        if (
-            not isinstance(style_image, np.ndarray)
-            or style_image.shape[-1] != 3
-        ):
-            raise TypeError(
-                "style_image must be a numpy.ndarray" " with shape (h, w, 3)"
-            )
+        if (not isinstance(style_image, np.ndarray)
+                or style_image.shape[-1] != 3):
+            raise TypeError("style_image must be a numpy.ndarray"
+                            " with shape (h, w, 3)")
         else:
             self.style_image = self.scale_image(style_image)
 
-        if (
-            not isinstance(content_image, np.ndarray)
-            or content_image.shape[-1] != 3
-        ):
-            raise TypeError(
-                "content_image must be a numpy.ndarray"
-                " with shape (h, w, 3)"
-            )
+        if (not isinstance(content_image, np.ndarray)
+                or content_image.shape[-1] != 3):
+            raise TypeError("content_image must be a numpy.ndarray"
+                            " with shape (h, w, 3)")
         else:
             self.content_image = self.scale_image(content_image)
 
@@ -106,11 +94,8 @@ class NST:
             or doesn't have shape (h, w, 3).
         """
         if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
-            raise (
-                TypeError(
-                    "image must be a numpy.ndarray with shape (h, w, 3)"
-                )
-            )
+            raise (TypeError
+                   ("image must be a numpy.ndarray with shape (h, w, 3)"))
 
         h, w, _ = image.shape
 
@@ -121,9 +106,9 @@ class NST:
             h_new = 512
             w_new = int((w * 512) / h)
 
-        resized_image = tf.image.resize(
-            image, size=[h_new, w_new], method='bicubic'
-        )
+        resized_image = tf.image.resize(image,
+                                        size=[h_new, w_new],
+                                        method='bicubic')
 
         # Normalize
         resized_image = resized_image / 255.0
@@ -159,8 +144,9 @@ class NST:
         """
         # Keras API
         modelVGG19 = tf.keras.applications.VGG19(
-            include_top=False, weights='imagenet'
-        )
+                include_top=False,
+                weights='imagenet'
+                )
 
         modelVGG19.trainable = False
 
@@ -168,8 +154,8 @@ class NST:
         selected_layers = self.style_layers + [self.content_layer]
 
         outputs = [
-            modelVGG19.get_layer(name).output for name in selected_layers
-        ]
+                modelVGG19.get_layer(name).output for name in selected_layers
+                ]
 
         # construct model
         model = tf.keras.Model([modelVGG19.input], outputs)
@@ -178,28 +164,55 @@ class NST:
         custom_objects = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
         tf.keras.models.save_model(model, 'vgg_base.h5')
         model_avg = tf.keras.models.load_model(
-            'vgg_base.h5', custom_objects=custom_objects
-        )
+                'vgg_base.h5', custom_objects=custom_objects
+                )
 
         self.model = model_avg
 
     @staticmethod
     def gram_matrix(input_layer):
-        if (
-            not isinstance(input_layer, (tf.Tensor, tf.Variable))
-            or input_layer.ndim != 4
-        ):
+        """
+        Calculates the Gram matrix of an input tensor (layer).
+
+        The Gram matrix is used in style transfer to measure the correlations
+        between the features in a given layer of the neural network. It is
+        computed by reshaping the input tensor into a 2D matrix and then
+        performing matrix multiplication. The result is normalized by the
+        total number of elements in the feature map.
+
+        Args:
+            input_layer (tf.Tensor or tf.Variable):
+                A 4D tensor of shape
+                (batch_size, height, width, channels) representing a layer of
+                the neural network.
+
+        Returns:
+            tf.Tensor: The Gram matrix of shape (1, channels, channels),
+            normalized by the number of elements (height * width) in the
+            feature map.
+
+        Raises:
+            TypeError:
+                If input_layer is not a tensor or variable of rank 4.
+        """
+        if not isinstance(
+                input_layer,
+                (tf.Tensor, tf.Variable)
+                ) or len(input_layer.shape) != 4:
             raise TypeError("input_layer must be a tensor of rank 4")
 
+        # Get the dimensions
         _, h, w, c = input_layer.shape
-        features = tf.reshape(input_layer, (h * w, c))
 
-        gram = tf.matmul(features, features, transpose_a=True)
+        # Reshape the tensor to a 2D matrix
+        input_layer_reshaped = tf.reshape(input_layer, (h * w, c))
 
-        # Normalize by number of spatial locations
-        gram = gram / tf.cast(h * w, tf.float32)
+        # Compute the gram matrix
+        gram = tf.matmul(input_layer_reshaped,
+                         input_layer_reshaped,
+                         transpose_a=True)
 
-        # Add batch dimension
-        gram = tf.expand_dims(gram, axis=0)
+        # Normalize the gram matrix
+        gram_matrix = tf.expand_dims(gram / tf.cast(h * w, tf.float32), axis=0)
 
-        return gram
+        return gram_matrix
