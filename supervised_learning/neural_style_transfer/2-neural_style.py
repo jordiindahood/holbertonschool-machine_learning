@@ -183,24 +183,23 @@ class NST:
 
         self.model = model_avg
 
-    def gram_matrix(self, input_layer):
-        """Calculates the Gram matrix of a layer"""
-
-        # Validate input
+    @staticmethod
+    def gram_matrix(input_layer):
         if (
             not isinstance(input_layer, (tf.Tensor, tf.Variable))
             or input_layer.ndim != 4
         ):
             raise TypeError("input_layer must be a tensor of rank 4")
 
-        # Shape: (1, h, w, c) → (c, h*w)
         _, h, w, c = input_layer.shape
         features = tf.reshape(input_layer, (h * w, c))
 
-        # Compute Gram matrix: (c, c)
         gram = tf.matmul(features, features, transpose_a=True)
 
-        # Add batch dimension: (1, c, c)
+        # Normalize by number of spatial locations
+        gram = gram / tf.cast(h * w, tf.float32)
+
+        # Add batch dimension
         gram = tf.expand_dims(gram, axis=0)
 
         return gram
