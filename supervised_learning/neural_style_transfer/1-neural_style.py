@@ -87,19 +87,50 @@ class NST:
         return image
 
     def load_model(self):
-        """Create the VGG19-based model used to calculate cost"""
+        """Creates VGG19-based model with Average Pooling"""
 
-        # Load VGG19 without top layers
+        # Load pretrained VGG19
         vgg = tf.keras.applications.VGG19(
             include_top=False, weights='imagenet'
         )
-
-        # Freeze the model
         vgg.trainable = False
 
-        # Collect outputs for style and content layers
-        outputs = [vgg.get_layer(layer).output for layer in self.style_layers]
-        outputs.append(vgg.get_layer(self.content_layer).output)
+        inputs = tf.keras.Input(shape=(None, None, 3))
+        x = inputs
+        outputs = []
 
-        # Create the model
-        self.model = tf.keras.Model(inputs=vgg.input, outputs=outputs)
+        # Rebuild VGG19, replacing MaxPool with AvgPool
+        for layer in vgg.layers[1:]:
+            if isinstance(layer, tf.keras.layers.Conv2D):
+                x = tf.keras.layers.Conv2D(
+                    filters=layer.filters,
+                    kernel_size=layer.kernel_size,
+                    strides=layer.strides,
+                    padding=layer.padding,
+                    activation=layer.activation,
+                    name=layer.name,
+                    weights=layer.get_weights(),
+                )(x)
+
+            elif isinstance(layer, tf.keras.layers.MaxPooling2D):
+                x = tf.keras.layers.AveragePooling2D(
+                    pool_size=layer.pool_size,
+                    strides=layer.strides,
+                    padding=layer.padding,
+                    name=layer.name.replace("max", "avg"),
+                )(x)
+
+            # Save style/content outputs
+            if (
+                layer.name in self.style_layers
+                or layer.name == self.content_layer
+            ):
+                outputs.append(x)
+
+            # Stop after content layer
+            if layer.name == self.content_layer:
+                break
+
+        # Final model
+        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
+        self.model.trainable = False
