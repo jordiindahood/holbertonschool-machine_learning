@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 2 : 2. Gram Matrix """
+""" Task 3 : 3. Extract Features """
 import numpy as np
 import tensorflow as tf
 
@@ -34,47 +34,61 @@ class NST:
     content_layer = 'block5_conv2'
 
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
-        """Class constructor"""
+        """
+        Initializes the NST class with style and content images,
+        and loss weights.
 
-        # Validate style image
+        Args:
+            style_image (numpy.ndarray):
+            Style image to apply, must be of shape (h, w, 3).
+            content_image (numpy.ndarray):
+            Content image to preserve, must be of shape (h, w, 3).
+            alpha (float, optional):
+            Weight for content loss, default is 1e4.
+            beta (float, optional):
+            Weight for style loss, default is 1.
+
+        Raises:
+            TypeError: If style_image or content_image are not numpy.
+            ndarrays or don't have shape (h, w, 3).
+            TypeError: If alpha or beta are not non-negative numbers.
+        """
         if (
             not isinstance(style_image, np.ndarray)
-            or style_image.ndim != 3
-            or style_image.shape[2] != 3
+            or style_image.shape[-1] != 3
         ):
             raise TypeError(
-                "style_image must be a numpy.ndarray with shape (h, w, 3)"
+                "style_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
+        else:
+            self.style_image = self.scale_image(style_image)
 
-        # Validate content image
         if (
             not isinstance(content_image, np.ndarray)
-            or content_image.ndim != 3
-            or content_image.shape[2] != 3
+            or content_image.shape[-1] != 3
         ):
             raise TypeError(
-                "content_image must be a numpy.ndarray with shape (h, w, 3)"
+                "content_image must be a numpy.ndarray"
+                " with shape (h, w, 3)"
             )
+        else:
+            self.content_image = self.scale_image(content_image)
 
-        # Validate alpha
         if not isinstance(alpha, (int, float)) or alpha < 0:
             raise TypeError("alpha must be a non-negative number")
+        else:
+            self.alpha = alpha
 
-        # Validate beta
         if not isinstance(beta, (int, float)) or beta < 0:
             raise TypeError("beta must be a non-negative number")
+        else:
+            self.beta = beta
 
-        # Set attributes
-        self.style_image = self.scale_image(style_image)
-        self.content_image = self.scale_image(content_image)
-        self.alpha = alpha
-        self.beta = beta
-
-        # Load VGG19 model for NST
+        self.model = None
         self.load_model()
-
-        # Extract style and content features
-        self.generate_features()
+        self.gram_style_features, self.content_feature = (
+            self.generate_features()
+        )
 
     @staticmethod
     def scale_image(image):
@@ -223,10 +237,47 @@ class NST:
         return gram_matrix
 
     def generate_features(self):
-        """Extracts style and content features"""
+        """
+        Extracts and processes style and content features from the style
+        and content images using the VGG19 model.
 
-        outputs = self.model(self.style_image)
+        This method preprocesses the style and content images and feeds them
+        into the loaded VGG19 model. For the style image, it computes the
+        Gram matrices of the style features from the designated layers.
+        For the content image, it extracts the features from the content layer.
+
+        The final Gram matrices (excluding the last style layer) are stored in
+        `self.gram_style_features`, while the content features from the last
+        content layer are stored in `self.content_feature`.
+
+        Returns:
+            tuple: A tuple containing:
+                - gram_style_features (list of tf.Tensor): List of
+                matrices for the style features extracted from the
+                style image.
+                - content_feature (tf.Tensor): The feature map extracted
+                 from the last content layer of the content image.
+        """
+        # preprocess style and content image
+        preprocess_style = tf.keras.applications.vgg19.preprocess_input(
+            self.style_image * 255
+        )
+        preprocess_content = tf.keras.applications.vgg19.preprocess_input(
+            self.content_image * 255
+        )
+
+        # get style and content outputs from VGG19 model
+        style_output = self.model(preprocess_style)
+        content_output = self.model(preprocess_content)
+
+        # compute Gram matrices for style features
         self.gram_style_features = [
-            self.gram_matrix(style_output) for style_output in outputs[:-1]
+            self.gram_matrix(style_layer) for style_layer in style_output
         ]
-        self.content_feature = outputs[-1]
+
+        # excluding the last element considered more suitable for capturing
+        # the style of image
+        self.gram_style_features = self.gram_style_features[:-1]
+
+        self.content_feature = content_output[-1]
+        return self.gram_style_features, self.content_feature
