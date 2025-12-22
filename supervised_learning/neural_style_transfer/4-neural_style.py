@@ -172,7 +172,8 @@ class NST:
 
     def layer_style_cost(self, style_output, gram_target):
         """
-        Calculates the style cost for a single layer in the style transfer process.
+        Calculates the style cost for a single layer in
+        the style transfer process.
         """
 
         if (not isinstance(style_output, (tf.Tensor, tf.Variable))
@@ -184,7 +185,7 @@ class NST:
         if (not isinstance(gram_target, (tf.Tensor, tf.Variable))
                 or gram_target.shape != [1, c, c]):
             raise TypeError(
-                    "gram_target must be a tensor of shape [{}, {}, {}]".format(
+                "gram_target must be a tensor of shape [{}, {}, {}]".format(
                         m,
                         c,
                         c
