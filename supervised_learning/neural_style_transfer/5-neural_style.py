@@ -8,20 +8,6 @@ class NST:
     """
     Neural Style Transfer (NST) class used to apply the style of
     one image to the content of another.
-
-    Attributes:
-        style_layers (list):
-        Layers from the pretrained model used to extract style features.
-        content_layer (str):
-        Layer used to extract content features.
-        style_image (numpy.ndarray):
-        Scaled style image used for the style transfer.
-        content_image (numpy.ndarray): Scaled content image used for
-        the style transfer.
-        alpha (float):
-        Weight for content loss.
-        beta (float):
-        Weight for style loss.
     """
 
     style_layers = ['block1_conv1', 'block2_conv1', 'block3_conv1',
@@ -32,21 +18,6 @@ class NST:
         """
         Initializes the NST class with style and content images,
         and loss weights.
-
-        Args:
-            style_image (numpy.ndarray):
-            Style image to apply, must be of shape (h, w, 3).
-            content_image (numpy.ndarray):
-            Content image to preserve, must be of shape (h, w, 3).
-            alpha (float, optional):
-            Weight for content loss, default is 1e4.
-            beta (float, optional):
-            Weight for style loss, default is 1.
-
-        Raises:
-            TypeError: If style_image or content_image are not numpy.
-            ndarrays or don't have shape (h, w, 3).
-            TypeError: If alpha or beta are not non-negative numbers.
         """
 
         if (not isinstance(style_image, np.ndarray)
@@ -83,18 +54,6 @@ class NST:
         """
         Rescales an image so that its pixel values are between 0 and 1
         and its largest side is 512 pixels.
-
-        Args:
-            image (numpy.ndarray):
-            Image to rescale, must have shape (h, w, 3).
-
-        Returns:
-            numpy.ndarray: Rescaled image with its largest side of 512 pixels,
-            and pixel values between 0 and 1.
-
-        Raises:
-            TypeError: If the input image is not a numpy.ndarray
-            or doesn't have shape (h, w, 3).
         """
         if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
             raise (TypeError
@@ -126,24 +85,6 @@ class NST:
     def load_model(self):
         """
         Loads and modifies the VGG19 model for neural style transfer.
-
-        This method:
-        1. Loads the VGG19 model pre-trained on ImageNet without the top
-        fully-connected layers.
-        2. Freezes the model's weights to prevent further training.
-        3. Extracts the outputs from specific layers used for style and
-        content extraction.
-        4. Replaces all MaxPooling layers in the model with AveragePooling
-        layers.
-        5. Saves the modified model and reloads it with AveragePooling
-        layers for consistent results.
-
-        The model includes outputs for the layers specified in
-        `self.style_layers`
-        for style extraction and `self.content_layer` for content extraction.
-
-        Returns:
-            None: The method assigns the loaded model to `self.model`.
         """
         # Keras API
         modelVGG19 = tf.keras.applications.VGG19(
@@ -176,27 +117,6 @@ class NST:
     def gram_matrix(input_layer):
         """
         Calculates the Gram matrix of an input tensor (layer).
-
-        The Gram matrix is used in style transfer to measure the correlations
-        between the features in a given layer of the neural network. It is
-        computed by reshaping the input tensor into a 2D matrix and then
-        performing matrix multiplication. The result is normalized by the
-        total number of elements in the feature map.
-
-        Args:
-            input_layer (tf.Tensor or tf.Variable):
-                A 4D tensor of shape
-                (batch_size, height, width, channels) representing a layer of
-                the neural network.
-
-        Returns:
-            tf.Tensor: The Gram matrix of shape (1, channels, channels),
-            normalized by the number of elements (height * width) in the
-            feature map.
-
-        Raises:
-            TypeError:
-                If input_layer is not a tensor or variable of rank 4.
         """
         if not isinstance(
                 input_layer,
@@ -224,23 +144,6 @@ class NST:
         """
         Extracts and processes style and content features from the style
         and content images using the VGG19 model.
-
-        This method preprocesses the style and content images and feeds them
-        into the loaded VGG19 model. For the style image, it computes the
-        Gram matrices of the style features from the designated layers.
-        For the content image, it extracts the features from the content layer.
-
-        The final Gram matrices (excluding the last style layer) are stored in
-        `self.gram_style_features`, while the content features from the last
-        content layer are stored in `self.content_feature`.
-
-        Returns:
-            tuple: A tuple containing:
-                - gram_style_features (list of tf.Tensor): List of
-                matrices for the style features extracted from the
-                style image.
-                - content_feature (tf.Tensor): The feature map extracted
-                 from the last content layer of the content image.
         """
         # preprocess style and content image
         preprocess_style = (tf.keras.applications.vgg19.
@@ -268,29 +171,7 @@ class NST:
 
     def layer_style_cost(self, style_output, gram_target):
         """
-    Calculates the style cost for a single layer in the style transfer process.
-
-    The style cost measures the difference between the Gram matrix of the
-    layer's style output and the Gram matrix of the target style.
-    The smaller the difference, the more closely the current image resembles
-    the target style.
-
-        Args:
-        style_output (tf.Tensor or tf.Variable): A 4D tensor representing
-        the style features output from the current layer of the neural
-        network. Must have shape (batch_size, height, width, channels).
-        gram_target (tf.Tensor or tf.Variable): The Gram matrix of the target
-        style for the given layer, with shape (1, channels, channels).
-
-        Returns:
-            tf.Tensor: A scalar tensor representing the style cost for the
-            given layer, which is the mean squared difference between
-            the current;layer's Gram matrix and the target Gram matrix.
-
-        Raises:
-            TypeError: If `style_output` is not a tensor of rank 4,
-            or if `gram_target` is not a tensor of the shape
-            (1, channels, channels).
+        Calculates the style cost for a single layer in the style transfer process.
         """
 
         if (not isinstance(style_output, (tf.Tensor, tf.Variable))
@@ -317,23 +198,7 @@ class NST:
 
     def style_cost(self, style_outputs):
         """
-    Calculates the total style cost for all specified style layers.
-
-    This method computes the weighted style cost by comparing the
-    style features (Gram matrices) of each specified layer in the generated
-    image to those of the target style image. Each layer's contribution
-    to the total cost is weighted equally.
-
-    Args:
-        style_outputs (list): A list of tensors, each representing the style
-            features from one of the specified style layers in the generated
-            image. The length of this list must match the number of layers
-            specified in `self.style_layers`.
-
-    Returns:
-        tf.Tensor: A scalar tensor representing the total style cost, which
-        is the weighted sum of the individual style costs from each layer.
-
+        Calculates the total style cost for all specified style layers.
         """
         len_style_layer = len(self.style_layers)
         if (not isinstance(style_outputs, list)
