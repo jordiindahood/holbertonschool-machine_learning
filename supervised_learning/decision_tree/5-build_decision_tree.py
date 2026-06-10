@@ -145,7 +145,9 @@ class Node:
             its so big omg
             """
             return np.all(
-                np.array([x[:, key] > self.lower[key] for key in self.lower.keys()]),
+                np.array(
+                    [x[:, key] > self.lower[key] for key in self.lower.keys()]
+                    ),
                 axis=0,
             )
 
@@ -154,7 +156,9 @@ class Node:
             is smol
             """
             return np.all(
-                np.array([x[:, key] <= self.upper[key] for key in self.upper.keys()]),
+                np.array(
+                    [x[:, key] <= self.upper[key] for key in self.upper.keys()]
+                    ),
                 axis=0,
             )
 

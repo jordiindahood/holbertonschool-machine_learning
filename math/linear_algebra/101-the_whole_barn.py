@@ -21,5 +21,7 @@ def add_matrices(mat1, mat2):
         return None
 
     # Add the matrices element-wise
-    result = [[a + b for a, b in zip(row1, row2)] for row1, row2 in zip(mat1, mat2)]
+    result = [
+        [a + b for a, b in zip(row1, row2)] for row1, row2 in zip(mat1, mat2)
+    ]
     return result

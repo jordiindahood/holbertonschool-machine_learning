@@ -53,7 +53,7 @@ def convolve(images, kernels, padding="same", stride=(1, 1)):
                 # element-wise multiplication of the kernel and the image
                 output[:, y, x, v] = (
                     kernels[:, :, :, v]
-                    * images[:, y * sh : y * sh + kh, x * sw : x * sw + kw, :]
+                    * images[:, y * sh: y * sh + kh, x * sw: x * sw + kw, :]
                 ).sum(axis=(1, 2, 3))
 
     return output

@@ -7,7 +7,9 @@ def determinant(matrix):
     Computes the determinant of a square matrix using recursion.
     """
 
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+    if not isinstance(matrix, list) or not all(
+        isinstance(row, list) for row in matrix
+    ):
         raise TypeError("matrix must be a list of lists")
 
     if len(matrix[0]) == 0:
@@ -25,6 +27,6 @@ def determinant(matrix):
     return sum(
         matrix[0][i]
         * (-1) ** i
-        * determinant([row[:i] + row[i + 1 :] for row in matrix[1:]])
+        * determinant([row[:i] + row[i + 1:] for row in matrix[1:]])
         for i in range(len(matrix))
     )
