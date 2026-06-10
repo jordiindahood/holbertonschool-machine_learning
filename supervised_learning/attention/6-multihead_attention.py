@@ -4,7 +4,7 @@
 
 import tensorflow as tf
 
-sdp_attention = __import__('5-sdp_attention').sdp_attention
+sdp_attention = __import__("5-sdp_attention").sdp_attention
 
 
 class MultiHeadAttention(tf.keras.layers.Layer):
@@ -49,9 +49,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         attention_output, weights = sdp_attention(Q, K, V, mask)
 
         attention_output = tf.transpose(attention_output, perm=[0, 2, 1, 3])
-        concat_attention = tf.reshape(
-            attention_output, (batch_size, -1, self.dm)
-        )
+        concat_attention = tf.reshape(attention_output, (batch_size, -1, self.dm))
 
         output = self.linear(concat_attention)
 

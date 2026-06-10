@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 2 """
+"""script 2"""
+
 import numpy as np
 
 
@@ -77,6 +78,6 @@ class GRUCell:
         ŷ = np.dot(h_t, self.Wy) + self.by
 
         # Activating using softmax
-        y = (np.exp(ŷ) / np.sum(np.exp(ŷ), axis=1, keepdims=True))
+        y = np.exp(ŷ) / np.sum(np.exp(ŷ), axis=1, keepdims=True)
 
         return h_t, y

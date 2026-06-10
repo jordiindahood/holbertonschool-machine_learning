@@ -11,13 +11,13 @@ class NST:
     """Neural Style Transfer class"""
 
     style_layers = [
-        'block1_conv1',
-        'block2_conv1',
-        'block3_conv1',
-        'block4_conv1',
-        'block5_conv1',
+        "block1_conv1",
+        "block2_conv1",
+        "block3_conv1",
+        "block4_conv1",
+        "block5_conv1",
     ]
-    content_layer = 'block5_conv2'
+    content_layer = "block5_conv2"
 
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
         """Initialize NST"""
@@ -28,9 +28,7 @@ class NST:
             or style_image.ndim != 3
             or style_image.shape[2] != 3
         ):
-            raise TypeError(
-                "style_image must be a numpy.ndarray with shape (h, w, 3)"
-            )
+            raise TypeError("style_image must be a numpy.ndarray with shape (h, w, 3)")
 
         # Validate content_image
         if (
@@ -61,14 +59,8 @@ class NST:
         """Rescale image"""
 
         # Validate image
-        if (
-            not isinstance(image, np.ndarray)
-            or image.ndim != 3
-            or image.shape[2] != 3
-        ):
-            raise TypeError(
-                "image must be a numpy.ndarray with shape (h, w, 3)"
-            )
+        if not isinstance(image, np.ndarray) or image.ndim != 3 or image.shape[2] != 3:
+            raise TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
 
         h, w, _ = image.shape
 

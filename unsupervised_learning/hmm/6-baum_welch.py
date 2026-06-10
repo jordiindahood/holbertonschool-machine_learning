@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Baum-Welch algorithm for HMMs"""
+
 import numpy as np
 
 
@@ -51,9 +52,7 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
             prod = alpha[:, T - 1] * beta[:, T - 1]
             gamma = np.hstack((gamma, prod[:, None] / np.sum(prod)))
 
-            Transition = (
-                np.sum(xi, axis=2) / np.sum(gamma[:, :-1], axis=1)[:, None]
-            )
+            Transition = np.sum(xi, axis=2) / np.sum(gamma[:, :-1], axis=1)[:, None]
 
             for j in range(N):
                 mask = Observations == j

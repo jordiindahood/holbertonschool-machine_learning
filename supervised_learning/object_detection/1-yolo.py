@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" script 1 """
+"""script 1"""
 
 import tensorflow.keras as K
 import numpy as np
@@ -12,13 +12,14 @@ class Yolo:
     It initializes with the necessary configurations and loads
     the pre-trained model.
     """
+
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """
         Initializes the Yolo class with the provided model,
         class names, and thresholds.
         """
         self.model = K.models.load_model(model_path)
-        with open(classes_path, 'r') as f:
+        with open(classes_path, "r") as f:
             self.class_names = [line.strip() for line in f]
         self.class_t = class_t
         self.nms_t = nms_t
@@ -28,7 +29,7 @@ class Yolo:
         """
         Apply the sigmoid activation function.
         """
-        return (1 / (1 + np.exp(-x)))
+        return 1 / (1 + np.exp(-x))
 
     def process_outputs(self, outputs, image_size):
         """

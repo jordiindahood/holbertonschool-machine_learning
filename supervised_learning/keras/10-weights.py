@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-""" script 10 """
+"""script 10"""
+
 import tensorflow.keras as K
 
 
-def save_weights(network, filename, save_format='h5'):
+def save_weights(network, filename, save_format="h5"):
     """
     Saves a model’s weights to a file.
     """

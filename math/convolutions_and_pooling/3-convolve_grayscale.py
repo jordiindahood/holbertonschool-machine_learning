@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 3 """
+"""script 3"""
+
 import numpy as np
 
 
@@ -42,9 +43,7 @@ def convolve_grayscale(images, kernel, padding="same", stride=(1, 1)):
         for y in range(new_h):
             # element-wise multiplication of the kernel and the image
             output[:, y, x] = (
-                kernel * padded_image[:,
-                                      y * sh: y * sh + kh,
-                                      x * sw: x * sw + kw]
+                kernel * padded_image[:, y * sh : y * sh + kh, x * sw : x * sw + kw]
             ).sum(axis=(1, 2))
 
     return output

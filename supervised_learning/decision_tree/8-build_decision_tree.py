@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Task 8: 8. Using Gini impurity function as a splitting criterion """
+"""Task 8: 8. Using Gini impurity function as a splitting criterion"""
+
 import numpy as np
 
 
@@ -30,8 +31,15 @@ class Node:
         Calculates the maximum depth of the subtree rooted at this node.
     """
 
-    def __init__(self, feature=None, threshold=None,
-                 left_child=None, right_child=None, is_root=False, depth=0):
+    def __init__(
+        self,
+        feature=None,
+        threshold=None,
+        left_child=None,
+        right_child=None,
+        is_root=False,
+        depth=0,
+    ):
         """
         Initializes a Node with the given parameters.
 
@@ -118,10 +126,10 @@ class Node:
             The text with the left child prefix added to each line.
         """
         lines = text.split("\n")
-        new_text = "    +--"+lines[0]+"\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  "+x)+"\n"
-        return (new_text)
+            new_text += ("    |  " + x) + "\n"
+        return new_text
 
     def right_child_add_prefix(self, text):
         """
@@ -137,10 +145,10 @@ class Node:
             The text with the right child prefix added to each line.
         """
         lines = text.split("\n")
-        new_text = "    +--"+lines[0]+"\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("       "+x)+"\n"
-        return (new_text.rstrip())
+            new_text += ("       " + x) + "\n"
+        return new_text.rstrip()
 
     def __str__(self):
         """
@@ -154,9 +162,11 @@ class Node:
             t = "root"
         else:
             t = "-> node"
-        return f"{t} [feature={self.feature}, threshold={self.threshold}]\n"\
-            + self.left_child_add_prefix(str(self.left_child))\
+        return (
+            f"{t} [feature={self.feature}, threshold={self.threshold}]\n"
+            + self.left_child_add_prefix(str(self.left_child))
             + self.right_child_add_prefix(str(self.right_child))
+        )
 
     def get_leaves_below(self):
         """
@@ -213,8 +223,10 @@ class Node:
                 A 1D NumPy array of boolean values
                 indicating if each individual meets the condition.
             """
-            return np.all(np.array([x[:, key] > self.lower[key]
-                                    for key in self.lower.keys()]), axis=0)
+            return np.all(
+                np.array([x[:, key] > self.lower[key] for key in self.lower.keys()]),
+                axis=0,
+            )
 
         def is_small_enough(x):
             """
@@ -230,11 +242,14 @@ class Node:
                 A 1D NumPy array of boolean values indicating
                 if each individual meets the condition.
             """
-            return np.all(np.array([x[:, key] <= self.upper[key]
-                                    for key in self.upper.keys()]), axis=0)
+            return np.all(
+                np.array([x[:, key] <= self.upper[key] for key in self.upper.keys()]),
+                axis=0,
+            )
 
-        self.indicator = lambda x: \
-            np.all(np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
+        self.indicator = lambda x: np.all(
+            np.array([is_large_enough(x), is_small_enough(x)]), axis=0
+        )
 
     def pred(self, x):
         """
@@ -316,7 +331,7 @@ class Leaf(Node):
         str
             The string representation of the leaf node.
         """
-        return (f"-> leaf [value={self.value}]")
+        return f"-> leaf [value={self.value}]"
 
     def get_leaves_below(self):
         """
@@ -351,7 +366,7 @@ class Leaf(Node):
         return self.value
 
 
-class Decision_Tree():
+class Decision_Tree:
     """
     A class representing a decision tree.
 
@@ -378,8 +393,9 @@ class Decision_Tree():
         Returns the maximum depth of the tree.
     """
 
-    def __init__(self, max_depth=10, min_pop=1, seed=0,
-                 split_criterion="random", root=None):
+    def __init__(
+        self, max_depth=10, min_pop=1, seed=0, split_criterion="random", root=None
+    ):
         """
         Initializes a Decision_Tree with the given parameters.
 
@@ -467,8 +483,7 @@ class Decision_Tree():
         for leaf in leaves:
             leaf.update_indicator()
         self.predict = lambda A: np.sum(
-            np.array([leaf.indicator(A) * leaf.value for leaf in leaves]),
-            axis=0
+            np.array([leaf.indicator(A) * leaf.value for leaf in leaves]), axis=0
         )
 
     def pred(self, x):
@@ -514,12 +529,12 @@ class Decision_Tree():
         diff = 0
         while diff == 0:
             feature = self.rng.integers(0, self.explanatory.shape[1])
-            feature_min, feature_max = self.np_extrema(self.explanatory
-                                                       [:, feature]
-                                                       [node.sub_population])
-            diff = feature_max-feature_min
+            feature_min, feature_max = self.np_extrema(
+                self.explanatory[:, feature][node.sub_population]
+            )
+            diff = feature_max - feature_min
         x = self.rng.uniform()
-        threshold = (1-x)*feature_min + x * feature_max
+        threshold = (1 - x) * feature_min + x * feature_max
         return feature, threshold
 
     def fit(self, explanatory, target, verbose=0):
@@ -541,7 +556,7 @@ class Decision_Tree():
 
         self.explanatory = explanatory
         self.target = target
-        self.root.sub_population = np.ones_like(self.target, dtype='bool')
+        self.root.sub_population = np.ones_like(self.target, dtype="bool")
 
         self.fit_node(self.root)
 
@@ -552,8 +567,10 @@ class Decision_Tree():
     - Depth                     : {self.depth()}
     - Number of nodes           : {self.count_nodes()}
     - Number of leaves          : {self.count_nodes(only_leaves=True)}""")
-            print(f"    - Accuracy on training data : "
-                  f"{self.accuracy(self.explanatory, self.target)}")
+            print(
+                f"    - Accuracy on training data : "
+                f"{self.accuracy(self.explanatory, self.target)}"
+            )
 
     def fit_node(self, node):
         """
@@ -565,25 +582,34 @@ class Decision_Tree():
         """
         node.feature, node.threshold = self.split_criterion(node)
 
-        left_population = node.sub_population & \
-            (self.explanatory[:, node.feature] > node.threshold)
+        left_population = node.sub_population & (
+            self.explanatory[:, node.feature] > node.threshold
+        )
         right_population = node.sub_population & ~left_population
         if len(left_population) != len(self.target):
-            left_population = np.pad(left_population,
-                                     (0, len(self.target) -
-                                      len(self.left_population)),
-                                     'constant', constant_values=(0))
+            left_population = np.pad(
+                left_population,
+                (0, len(self.target) - len(self.left_population)),
+                "constant",
+                constant_values=(0),
+            )
         if len(right_population) != len(self.target):
-            right_population = np.pad(right_population,
-                                      (0, len(self.target) -
-                                       len(self.right_population)),
-                                      'constant', constant_values=(0))
-        is_left_leaf = (node.depth == self.max_depth - 1 or
-                        np.sum(left_population) <= self.min_pop or
-                        np.unique(self.target[left_population]).size == 1)
-        is_right_leaf = (node.depth == self.max_depth - 1 or
-                         np.sum(right_population) <= self.min_pop or
-                         np.unique(self.target[right_population]).size == 1)
+            right_population = np.pad(
+                right_population,
+                (0, len(self.target) - len(self.right_population)),
+                "constant",
+                constant_values=(0),
+            )
+        is_left_leaf = (
+            node.depth == self.max_depth - 1
+            or np.sum(left_population) <= self.min_pop
+            or np.unique(self.target[left_population]).size == 1
+        )
+        is_right_leaf = (
+            node.depth == self.max_depth - 1
+            or np.sum(right_population) <= self.min_pop
+            or np.unique(self.target[right_population]).size == 1
+        )
         if is_left_leaf:
             node.left_child = self.get_leaf_child(node, left_population)
         else:
@@ -673,8 +699,10 @@ class Decision_Tree():
         float
             The accuracy of the decision tree on the test data.
         """
-        return np.sum(np.equal(self.predict(test_explanatory),
-                               test_target))/test_target.size
+        return (
+            np.sum(np.equal(self.predict(test_explanatory), test_target))
+            / test_target.size
+        )
 
     def possible_thresholds(self, node, feature):
         """
@@ -734,8 +762,7 @@ class Decision_Tree():
             left_size = np.sum(left_indices)
             right_size = np.sum(right_indices)
             total_size = left_size + right_size
-            gini_sum1 = ((gini_left * left_size + gini_right * right_size)
-                         / total_size)
+            gini_sum1 = (gini_left * left_size + gini_right * right_size) / total_size
             gini_sum.append(gini_sum1)
 
         min_index = np.argmin(gini_sum)
@@ -759,7 +786,11 @@ class Decision_Tree():
             - The second element is the Gini impurity
             value associated with that best split.
         """
-        X = np.array([self.Gini_split_criterion_one_feature(node, i)
-                      for i in range(self.explanatory.shape[1])])
+        X = np.array(
+            [
+                self.Gini_split_criterion_one_feature(node, i)
+                for i in range(self.explanatory.shape[1])
+            ]
+        )
         i = np.argmin(X[:, 1])
         return i, X[i, 0]

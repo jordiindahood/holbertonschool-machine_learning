@@ -11,7 +11,7 @@ def ngram_bleu(references, sentence, n):
     """
 
     def ngrams(seq, n):
-        return [tuple(seq[i: i + n]) for i in range(len(seq) - n + 1)]
+        return [tuple(seq[i : i + n]) for i in range(len(seq) - n + 1)]
 
     sentence_ngrams = ngrams(sentence, n)
     sentence_counts = Counter(sentence_ngrams)
@@ -20,9 +20,7 @@ def ngram_bleu(references, sentence, n):
     for ref in references:
         ref_ngrams = Counter(ngrams(ref, n))
         for ngram in ref_ngrams:
-            max_ref_counts[ngram] = max(
-                max_ref_counts[ngram], ref_ngrams[ngram]
-            )
+            max_ref_counts[ngram] = max(max_ref_counts[ngram], ref_ngrams[ngram])
 
     clipped_counts = {
         ngram: min(count, max_ref_counts.get(ngram, 0))

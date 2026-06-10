@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-""" Task 5"""
+"""Task 5"""
+
 import tensorflow.compat.v1 as tf  # type: ignore
+
 tf.disable_eager_execution()
 
 

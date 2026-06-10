@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Task 0: 0. Placeholders"""
+"""Task 0: 0. Placeholders"""
+
 import tensorflow.compat.v1 as tf  # type: ignore
 
 

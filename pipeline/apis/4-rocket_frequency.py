@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 4 """
+"""script 4"""
 
 import requests
 from collections import defaultdict
@@ -38,9 +38,7 @@ def rocket_frequency():
             rocket_names[rocket_id] = "unknown"
 
     # Prepare list of tuples (name, count)
-    rockets_list = [
-        (rocket_names[rid], count) for rid, count in rocket_counts.items()
-    ]
+    rockets_list = [(rocket_names[rid], count) for rid, count in rocket_counts.items()]
 
     # Sort by count descending, then name ascending
     rockets_list.sort(key=lambda x: (-x[1], x[0]))

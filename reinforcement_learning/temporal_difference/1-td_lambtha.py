@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Temporal difference algorithm with trace decay parameter"""
 
-
 import numpy as np
 
 
 def td_lambtha(
-    env, V, policy, lambtha, episodes=5000,
-    max_steps=100, alpha=0.1, gamma=0.99
+    env, V, policy, lambtha, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99
 ):
     """Updates V value based on TD with trace decay algorithm"""
     for episode in range(episodes):

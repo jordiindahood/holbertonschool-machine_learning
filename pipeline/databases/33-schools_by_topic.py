@@ -10,7 +10,7 @@ def schools_by_topic(mongo_collection, topic):
     for elem in all_items:
         docs.append(elem)
     for elem in docs:
-        if 'topics' in elem.keys():
-            if topic in elem['topics']:
+        if "topics" in elem.keys():
+            if topic in elem["topics"]:
                 doc_filter.append(elem)
     return doc_filter

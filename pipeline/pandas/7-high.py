@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 7 """
+"""script 7"""
 
 
 def high(df):

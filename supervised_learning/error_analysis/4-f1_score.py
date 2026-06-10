@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 4 """
+"""script 4"""
+
 sensitivity = __import__("1-sensitivity").sensitivity
 precision = __import__("2-precision").precision
 

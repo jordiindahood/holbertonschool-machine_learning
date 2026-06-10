@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 1 """
+"""script 1"""
 
 import requests
 

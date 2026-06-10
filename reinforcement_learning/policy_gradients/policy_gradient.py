@@ -2,6 +2,7 @@
 """
 Simple Policy function
 """
+
 import numpy as np
 
 

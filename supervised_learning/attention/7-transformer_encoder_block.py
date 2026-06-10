@@ -4,7 +4,7 @@
 
 import tensorflow as tf
 
-MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
+MultiHeadAttention = __import__("6-multihead_attention").MultiHeadAttention
 
 
 class EncoderBlock(tf.keras.layers.Layer):
@@ -14,7 +14,7 @@ class EncoderBlock(tf.keras.layers.Layer):
         """init"""
         super(EncoderBlock, self).__init__()
         self.mha = MultiHeadAttention(dm, h)
-        self.dense_hidden = tf.keras.layers.Dense(hidden, activation='relu')
+        self.dense_hidden = tf.keras.layers.Dense(hidden, activation="relu")
         self.dense_output = tf.keras.layers.Dense(dm)
         self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
         self.layernorm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)

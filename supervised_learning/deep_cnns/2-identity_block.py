@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 2 """
+"""script 2"""
+
 from tensorflow import keras as K
 
 
@@ -12,9 +13,9 @@ def identity_block(A_prev, filters):
     conv2d = K.layers.Conv2D(
         filters=F11,
         kernel_size=(1, 1),
-        padding='same',
+        padding="same",
         strides=(1, 1),
-        kernel_initializer=init
+        kernel_initializer=init,
     )(A_prev)
 
     batch_normalization = K.layers.BatchNormalization()(conv2d)
@@ -23,9 +24,9 @@ def identity_block(A_prev, filters):
     conv2d_1 = K.layers.Conv2D(
         filters=F3,
         kernel_size=(3, 3),
-        padding='same',
+        padding="same",
         strides=(1, 1),
-        kernel_initializer=init
+        kernel_initializer=init,
     )(activation)
 
     batch_normalization_1 = K.layers.BatchNormalization()(conv2d_1)
@@ -33,9 +34,9 @@ def identity_block(A_prev, filters):
     conv2d_2 = K.layers.Conv2D(
         filters=F12,
         kernel_size=(1, 1),
-        padding='same',
+        padding="same",
         strides=(1, 1),
-        kernel_initializer=init
+        kernel_initializer=init,
     )(activation_1)
 
     batch_normalization_2 = K.layers.BatchNormalization()(conv2d_2)

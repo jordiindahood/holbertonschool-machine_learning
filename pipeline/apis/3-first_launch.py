@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 3 """
+"""script 3"""
+
 import requests
 
 
@@ -38,9 +39,7 @@ def get_first_launch():
     lp_name = launchpad_data.get("name", "unknown")
     lp_locality = launchpad_data.get("locality", "unknown")
 
-    print(
-        f"{launch_name} ({launch_date}) {rocket_name} - {lp_name} ({lp_locality})"
-    )
+    print(f"{launch_name} ({launch_date}) {rocket_name} - {lp_name} ({lp_locality})")
 
 
 if __name__ == "__main__":

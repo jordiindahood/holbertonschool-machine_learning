@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 0"""
+"""script 0"""
+
 import numpy as np
 
 
@@ -15,7 +16,7 @@ def convolve_grayscale_valid(images, kernel):
     filter = np.zeros((images.shape[0], int(h - kh + 1), int(w - kw + 1)))
     for i in range(int(w - kw + 1)):
         for j in range(int(h - kh + 1)):
-            filter[:, j, i] = (kernel * images[:, j: j + kh, i: i + kw]).sum(
+            filter[:, j, i] = (kernel * images[:, j : j + kh, i : i + kw]).sum(
                 axis=(1, 2)
             )
     return filter

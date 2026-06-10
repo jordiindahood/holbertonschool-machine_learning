@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Task 5: 5. Definiteness """
+"""Task 5: 5. Definiteness"""
 
 import numpy as np
 
@@ -9,7 +9,7 @@ def definiteness(matrix):
     Determines the definiteness of a square matrix.
     """
     if not isinstance(matrix, np.ndarray):
-        raise TypeError('matrix must be a numpy.ndarray')
+        raise TypeError("matrix must be a numpy.ndarray")
 
     le = matrix.shape[0]
     if len(matrix.shape) != 2 or le != matrix.shape[1]:
@@ -22,12 +22,12 @@ def definiteness(matrix):
     w, v = np.linalg.eig(matrix)
 
     if all(w > 0):
-        return 'Positive definite'
+        return "Positive definite"
     elif all(w >= 0):
-        return 'Positive semi-definite'
+        return "Positive semi-definite"
     elif all(w < 0):
-        return 'Negative definite'
+        return "Negative definite"
     elif all(w <= 0):
-        return 'Negative semi-definite'
+        return "Negative semi-definite"
     else:
-        return 'Indefinite'
+        return "Indefinite"

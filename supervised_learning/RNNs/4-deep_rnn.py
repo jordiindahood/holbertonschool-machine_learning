@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script4 """
+"""script4"""
+
 import numpy as np
 
 
@@ -40,7 +41,7 @@ def deep_rnn(rnn_cells, X, h_0):
             H[i + 1, a_layer] = h_prev
 
             # update all the outputs
-            if (i != 0):
+            if i != 0:
                 Y[i] = y
 
             else:

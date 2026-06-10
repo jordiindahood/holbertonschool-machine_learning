@@ -4,7 +4,6 @@ Decision_Tree = __import__("7-build_decision_tree").Decision_Tree
 import numpy as np
 from sklearn import datasets
 
-
 #                                     #########################
 #                                     # Generating examples : #
 #                                     #########################

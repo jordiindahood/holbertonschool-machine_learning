@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 1 """
+"""script 1"""
+
 import pandas as pd
 
 # Create the DataFrame from a dictionary

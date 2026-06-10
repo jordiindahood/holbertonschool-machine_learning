@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 11 """
+"""script 11"""
 
 import tensorflow.keras as K
 
@@ -9,7 +9,7 @@ def save_config(network, filename):
     Saves a model’s configuration in JSON format.
     """
     json_string = network.to_json()
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.write(json_string)
     return None
 

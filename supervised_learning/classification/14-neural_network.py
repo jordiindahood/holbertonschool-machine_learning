@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 8"""
+"""script 8"""
+
 import numpy as np
 
 
@@ -84,14 +85,13 @@ class NeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         """
-        cost = -np.sum((Y * np.log(A))
-                       + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
+        cost = -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
         return cost
 
     def evaluate(self, X, Y):
         """Evaluates the neural network’s predictions"""
         self.forward_prop(X)
-        A2 = np.where(self.__A2 >= .5, 1, 0)
+        A2 = np.where(self.__A2 >= 0.5, 1, 0)
         cost = self.cost(Y, self.__A2)
         return A2, cost
 

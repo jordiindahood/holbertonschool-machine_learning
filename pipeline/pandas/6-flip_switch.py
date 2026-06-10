@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 6 """
+"""script 6"""
 
 
 def flip_switch(df):

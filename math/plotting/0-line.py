@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-    line.py
+line.py
 """
 
 import numpy as np

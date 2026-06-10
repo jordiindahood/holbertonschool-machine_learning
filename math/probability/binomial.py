@@ -42,7 +42,7 @@ class Binomial:
         nk_fact = self.factorial(self.n - k)
         comb = n_fact / (k_fact * nk_fact)
 
-        return comb * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+        return comb * (self.p**k) * ((1 - self.p) ** (self.n - k))
 
     def factorial(self, num):
         """Computes factorial of a number"""

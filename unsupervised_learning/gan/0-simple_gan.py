@@ -116,12 +116,9 @@ class Simple_GAN(keras.Model):
         # Discriminator wants:
         #  - real samples → +1
         #  - fake samples → -1
-        self.discriminator.loss = (
-            lambda x, y: tf.keras.losses.MeanSquaredError()(
-                x, tf.ones(x.shape)
-            )
-            + tf.keras.losses.MeanSquaredError()(y, -1 * tf.ones(y.shape))
-        )
+        self.discriminator.loss = lambda x, y: tf.keras.losses.MeanSquaredError()(
+            x, tf.ones(x.shape)
+        ) + tf.keras.losses.MeanSquaredError()(y, -1 * tf.ones(y.shape))
 
         self.discriminator.optimizer = keras.optimizers.Adam(
             learning_rate=self.learning_rate,
@@ -218,9 +215,7 @@ class Simple_GAN(keras.Model):
                 discr_loss = self.discriminator.loss(real_out, fake_out)
 
             # Apply discriminator gradients
-            grads = tape.gradient(
-                discr_loss, self.discriminator.trainable_variables
-            )
+            grads = tape.gradient(discr_loss, self.discriminator.trainable_variables)
             self.discriminator.optimizer.apply_gradients(
                 zip(grads, self.discriminator.trainable_variables)
             )

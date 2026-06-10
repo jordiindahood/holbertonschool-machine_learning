@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-    CLASS FILE FOR DECISION TREE
+CLASS FILE FOR DECISION TREE
 """
+
 import numpy as np
 
 

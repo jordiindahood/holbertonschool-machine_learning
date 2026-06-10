@@ -24,7 +24,7 @@ class RNNEncoder(tf.keras.layers.Layer):
             units,
             return_sequences=True,
             return_state=True,
-            recurrent_initializer='glorot_uniform',
+            recurrent_initializer="glorot_uniform",
         )
 
     def initialize_hidden_state(self):

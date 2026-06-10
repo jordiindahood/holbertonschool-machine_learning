@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-    two.py
+two.py
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 

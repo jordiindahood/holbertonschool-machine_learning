@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Deep Neural Network """
+"""Deep Neural Network"""
+
 import numpy as np
 
 
@@ -38,23 +39,22 @@ class DeepNeuralNetwork:
 
             if i == 0:
                 x = np.sqrt(2 / nx)
-                self.__weights['W1'] = np.random.randn(layers[i], nx) * x
+                self.__weights["W1"] = np.random.randn(layers[i], nx) * x
             else:
                 x = np.sqrt(2 / layers[i - 1])
-                self.__weights[W_key] = np.random.randn(layers[i],
-                                                        layers[i - 1]) * x
+                self.__weights[W_key] = np.random.randn(layers[i], layers[i - 1]) * x
 
     @property
     def L(self):
-        """ L"""
+        """L"""
         return self.__L
 
     @property
     def cache(self):
-        """ cache"""
+        """cache"""
         return self.__cache
 
     @property
     def weights(self):
-        """ weight"""
+        """weight"""
         return self.__weights

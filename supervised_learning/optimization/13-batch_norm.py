@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 13 """
+"""script 13"""
 
 
 def batch_norm(Z, gamma, beta, epsilon):

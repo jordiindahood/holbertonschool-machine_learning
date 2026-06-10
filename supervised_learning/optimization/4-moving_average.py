@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" script 4 """
+"""script 4"""
 
 
 def moving_average(data, beta):

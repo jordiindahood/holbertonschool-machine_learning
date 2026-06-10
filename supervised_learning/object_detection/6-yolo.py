@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-""" Task 4: 4. Load images"""
+"""Task 4: 4. Load images"""
+
 import tensorflow.keras as K
 import numpy as np
 import glob
 import cv2
+
 
 class Yolo:
     """
@@ -11,13 +13,14 @@ class Yolo:
     It initializes with the necessary configurations and loads
     the pre-trained model.
     """
+
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
         """
         Initializes the Yolo class with the provided model,
         class names, and thresholds.
         """
         self.model = K.models.load_model(model_path)
-        with open(classes_path, 'r') as f:
+        with open(classes_path, "r") as f:
             self.class_names = [line.strip() for line in f]
         self.class_t = class_t
         self.nms_t = nms_t
@@ -27,7 +30,7 @@ class Yolo:
         """
         Apply the sigmoid activation function.
         """
-        return (1 / (1 + np.exp(-x)))
+        return 1 / (1 + np.exp(-x))
 
     def process_outputs(self, outputs, image_size):
         """
@@ -143,9 +146,9 @@ class Yolo:
 
     def iou(self, x1, x2, y1, y2, pos1, pos2, area):
         """
-    Calculates the Intersection over Union (IoU) between two bounding boxes.
+        Calculates the Intersection over Union (IoU) between two bounding boxes.
 
-    representing the ratio of overlap to the total area covered by both boxes.
+        representing the ratio of overlap to the total area covered by both boxes.
         """
 
         # find the coordinates
@@ -159,7 +162,7 @@ class Yolo:
         width = np.maximum(0.0, c - a)
 
         # overlap ratio betw bounding box
-        intersection = (width * height)
+        intersection = width * height
         union = area[pos1] + area[pos2] - intersection
         iou = intersection / union
 
@@ -195,7 +198,7 @@ class Yolo:
 
             # loop remaining indexes to hold list of picked indexes
             keep = []
-            while (len(index_list) > 0):
+            while len(index_list) > 0:
                 pos1 = index_list[0]
                 pos2 = index_list[1:]
                 keep.append(pos1)
@@ -227,7 +230,7 @@ class Yolo:
 
         # creating a correct full path argument
         images = []
-        image_paths = glob.glob(folder_path + '/*', recursive=False)
+        image_paths = glob.glob(folder_path + "/*", recursive=False)
 
         # creating the images list
         for imagepath_i in image_paths:
@@ -277,24 +280,34 @@ class Yolo:
             start_point = int(box[0]), int(box[1])
             end_point = int(box[2]), int(box[3])
             scores = "{:.2f}".format(box_scores[i])
-            label = (self.class_names[box_classes[i]] + " " + scores)
+            label = self.class_names[box_classes[i]] + " " + scores
             oorg = (x1, y1 - 5)
             font = cv2.FONT_HERSHEY_SIMPLEX
             scale = 0.5
             text_color = (0, 0, 255)
             thick = 1
             line_Type = cv2.LINE_AA
-            image = cv2.rectangle(image, start_point, end_point,
-                                  (255, 0, 0), thickness=2)
+            image = cv2.rectangle(
+                image, start_point, end_point, (255, 0, 0), thickness=2
+            )
             print(image)
-            image = cv2.putText(image, label, oorg, font, scale, text_color,
-                                thick, line_Type, bottomLeftOrigin=False)
+            image = cv2.putText(
+                image,
+                label,
+                oorg,
+                font,
+                scale,
+                text_color,
+                thick,
+                line_Type,
+                bottomLeftOrigin=False,
+            )
         cv2.imshow(file_name, image)
 
         k = cv2.waitKey(0)
-        if k == ord('s'):
-            if not os.path.exists('detections'):
-                os.makedirs('detections')
-            os.chdir('detections')
+        if k == ord("s"):
+            if not os.path.exists("detections"):
+                os.makedirs("detections")
+            os.chdir("detections")
             cv2.imwrite(file_name, image)
         cv2.destroyAllWindows()

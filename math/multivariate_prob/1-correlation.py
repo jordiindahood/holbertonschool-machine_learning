@@ -20,7 +20,7 @@ def correlation(C):
 
     stddev_outer = np.outer(stddev, stddev)
 
-    with np.errstate(divide='ignore', invalid='ignore'):
+    with np.errstate(divide="ignore", invalid="ignore"):
         corr = C / stddev_outer
         corr[np.isnan(corr)] = 0
 

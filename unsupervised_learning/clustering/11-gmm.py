@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """script 10"""
+
 import sklearn.mixture
 
 

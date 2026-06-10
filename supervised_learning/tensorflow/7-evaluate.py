@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-""" Task 7: 7. Evaluate """
+"""Task 7: 7. Evaluate"""
+
 import tensorflow.compat.v1 as tf  # type: ignore
+
 tf.disable_eager_execution()
 
 

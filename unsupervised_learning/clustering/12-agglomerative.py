@@ -15,16 +15,16 @@ def agglomerative(X, dist):
     if not isinstance(dist, (int, float)) or dist <= 0:
         return None
 
-    Z = sch.linkage(X, method='ward')
+    Z = sch.linkage(X, method="ward")
 
     plt.figure()
     sch.dendrogram(Z, color_threshold=dist)
-    plt.axhline(y=dist, c='k', ls='--')
-    plt.title('Agglomerative Clustering Dendrogram')
-    plt.xlabel('Sample index')
-    plt.ylabel('Distance')
+    plt.axhline(y=dist, c="k", ls="--")
+    plt.title("Agglomerative Clustering Dendrogram")
+    plt.xlabel("Sample index")
+    plt.ylabel("Distance")
     plt.tight_layout()
     plt.show()
 
-    clss = sch.fcluster(Z, t=dist, criterion='distance') - 1
+    clss = sch.fcluster(Z, t=dist, criterion="distance") - 1
     return clss

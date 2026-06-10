@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-    sum_total
+sum_total
 """
 
 

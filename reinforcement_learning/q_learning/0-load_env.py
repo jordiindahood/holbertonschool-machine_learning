@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Loads the FrozenLake environment."""
+
 import gymnasium as gym
+
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
     """Loads the FrozenLake environment with render_mode='ansi'."""

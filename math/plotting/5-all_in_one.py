@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-    all_in_one.py
+all_in_one.py
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 

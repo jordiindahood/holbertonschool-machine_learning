@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 4 """
+"""script 4"""
+
 import numpy as np
 
 
@@ -10,7 +11,7 @@ def dropout_forward_prop(X, weights, L, keep_prob):
     """
 
     myDict = dict()
-    myDict['A0'] = X
+    myDict["A0"] = X
 
     for idx in range(1, L + 1):
         keyA = "A{}".format(idx)

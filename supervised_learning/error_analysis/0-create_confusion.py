@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 0000 """
+"""script 0000"""
+
 import numpy as np
 
 

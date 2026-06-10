@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 0 """
+"""script 0"""
+
 from tensorflow import keras as K
 
 
@@ -51,8 +52,7 @@ def inception_block(A_prev, filters):
         kernel_initializer=initializer,
     )(layer2)
 
-    layer3 = K.layers.MaxPool2D(pool_size=(3, 3),
-                                padding="same", strides=(1, 1))(
+    layer3 = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(1, 1))(
         A_prev
     )
 

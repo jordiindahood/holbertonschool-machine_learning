@@ -5,7 +5,7 @@
 class Exponential:
     """Class to represent an exponential distribution"""
 
-    def __init__(self, data=None, lambtha=1.):
+    def __init__(self, data=None, lambtha=1.0):
         """Initialize"""
         if data is None:
             if lambtha <= 0:
@@ -25,7 +25,7 @@ class Exponential:
         """Calculates the PDF for a given time period x"""
         if x < 0:
             return 0
-        return self.lambtha * self.e**(-self.lambtha * x)
+        return self.lambtha * self.e ** (-self.lambtha * x)
 
     def cdf(self, x):
         """Calculates the CDF for a given time period x"""

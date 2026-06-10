@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" scrippt 0"""
+"""scrippt 0"""
+
 import numpy as np
 
 
@@ -9,13 +10,13 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """
 
     # Retrieving dimensions from A_prev shape
-    (m, h_prev, w_prev, c_prev) = A_prev.shape
+    m, h_prev, w_prev, c_prev = A_prev.shape
 
     # Retrieving dimensions from W's shape
-    (kh, kw, c_prev, c_new) = W.shape
+    kh, kw, c_prev, c_new = W.shape
 
     # Retrieving stride
-    (sh, sw) = stride
+    sh, sw = stride
 
     pw, ph = 0, 0
 
@@ -24,7 +25,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     n_w = int(((w_prev + 2 * pw - kw) / sw) + 1)
 
     # Setting padding for same
-    if padding == 'same':
+    if padding == "same":
         if kh % 2 == 0:
             ph = int((h_prev * sh + kh - h_prev) / 2)
             n_h = int(((h_prev + 2 * ph - kh) / sh))
@@ -39,12 +40,12 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
             pw = int(((w_prev - 1) * sw + kw - w_prev) / 2)
             n_w = int(((w_prev + 2 * pw - kw) / sw) + 1)
 
-    images = np.pad(A_prev,
-                    pad_width=((0, 0),
-                               (ph, ph),
-                               (pw, pw),
-                               (0, 0)),
-                    mode='constant', constant_values=0)
+    images = np.pad(
+        A_prev,
+        pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
+        mode="constant",
+        constant_values=0,
+    )
 
     # Initialize the output with zeros
     output = np.zeros((m, n_h, n_w, c_new))
@@ -55,15 +56,11 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
             # over every channel
             for v in range(c_new):
                 # element-wise multiplication of the kernel and the image
-                output[:, y, x, v] = \
-                    (W[:, :, :, v] *
-                     images[:,
-                            y * sh: y * sh + kh,
-                            x * sw: x * sw + kw,
-                            :]).sum(axis=(1, 2, 3))
+                output[:, y, x, v] = (
+                    W[:, :, :, v]
+                    * images[:, y * sh : y * sh + kh, x * sw : x * sw + kw, :]
+                ).sum(axis=(1, 2, 3))
 
-                output[:, y, x, v] = \
-                    (activation(output[:, y, x, v] +
-                                b[0, 0, 0, v]))
+                output[:, y, x, v] = activation(output[:, y, x, v] + b[0, 0, 0, v])
 
     return output

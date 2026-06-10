@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 3 """
+"""script 3"""
+
 import numpy as np
 
 
@@ -19,6 +20,7 @@ class LSTMCell:
         bo (np.ndarray): Output gate bias, shape (1, h).
         by (np.ndarray): Output bias, shape (1, o).
     """
+
     def __init__(self, i, h, o):
         """
         Initialize weights and biases.
@@ -85,6 +87,6 @@ class LSTMCell:
         ŷ = np.dot(h_t, self.Wy) + self.by
 
         # Activating using softmax
-        y = (np.exp(ŷ) / np.sum(np.exp(ŷ), axis=1, keepdims=True))
+        y = np.exp(ŷ) / np.sum(np.exp(ŷ), axis=1, keepdims=True)
 
         return h_t, c_t, y

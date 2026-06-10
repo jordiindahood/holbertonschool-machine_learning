@@ -2,8 +2,10 @@
 """
 Implement the training
 """
+
 import numpy as np
-policy_gradient = __import__('policy_gradient').policy_gradient
+
+policy_gradient = __import__("policy_gradient").policy_gradient
 
 
 def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
@@ -18,10 +20,7 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
     Returns:
         all values of the score (sum of all rewards during  one episode loop)
     """
-    weights = np.random.rand(
-        env.observation_space.shape[0],
-        env.action_space.n
-    )
+    weights = np.random.rand(env.observation_space.shape[0], env.action_space.n)
 
     scores = []
 
@@ -36,10 +35,7 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
         done = False
 
         while not done:
-            action, gradient = policy_gradient(
-                state,
-                weights
-            )
+            action, gradient = policy_gradient(state, weights)
 
             if show_result and episode % 1000 == 0:
                 env.render()
@@ -59,9 +55,7 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
         scores.append(score)
 
         for i, gradient in enumerate(episode_gradients):
-            reward = sum(
-                R * gamma ** indx for indx, R in enumerate(episode_rewards[i:])
-            )
+            reward = sum(R * gamma**indx for indx, R in enumerate(episode_rewards[i:]))
 
             weights += alpha * reward * gradient
 

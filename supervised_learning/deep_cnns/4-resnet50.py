@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-""" script 4  """
+"""script 4"""
+
 from tensorflow import keras as K
 
-identity_block = __import__('2-identity_block').identity_block
-projection_block = __import__('3-projection_block').projection_block
+identity_block = __import__("2-identity_block").identity_block
+projection_block = __import__("3-projection_block").projection_block
 
 
 def resnet50():
@@ -25,8 +26,7 @@ def resnet50():
     layer = K.layers.BatchNormalization(axis=3)(layer)
     layer = K.layers.ReLU()(layer)
 
-    layer = K.layers.MaxPool2D(pool_size=(3, 3),
-                               padding="same", strides=(2, 2))(layer)
+    layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(layer)
 
     layer = projection_block(layer, [64, 64, 256], 1)
     for i in range(2):
@@ -44,8 +44,7 @@ def resnet50():
     for i in range(2):
         layer = identity_block(layer, [512, 512, 2048])
 
-    layer = K.layers.AveragePooling2D(pool_size=(7, 7),
-                                      padding="same")(layer)
+    layer = K.layers.AveragePooling2D(pool_size=(7, 7), padding="same")(layer)
 
     layer = K.layers.Dense(
         units=1000,

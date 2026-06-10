@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 8"""
+"""script 8"""
+
 import numpy as np
 
 
@@ -84,14 +85,13 @@ class NeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         """
-        cost = -np.sum((Y * np.log(A))
-                       + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
+        cost = -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
         return cost
 
     def evaluate(self, X, Y):
         """Evaluates the neural network’s predictions"""
         self.forward_prop(X)
-        A2 = np.where(self.__A2 >= .5, 1, 0)
+        A2 = np.where(self.__A2 >= 0.5, 1, 0)
         cost = self.cost(Y, self.__A2)
         return A2, cost
 
@@ -115,8 +115,9 @@ class NeuralNetwork:
         self.__W1 = self.__W1 - (alpha * dW1).T
         self.__b1 = self.__b1 - alpha * db1
 
-    def train(self, X, Y, iterations=5000, alpha=0.05,
-              verbose=True, graph=True, step=100):
+    def train(
+        self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100
+    ):
         """
         Train the neuron
         """
@@ -145,12 +146,15 @@ class NeuralNetwork:
                 costList.append(self.cost(Y, self.__A2))
                 stepList.append(i)
                 if verbose is True:
-                    print("Cost after {} iterations: {}".
-                          format(i, self.cost(Y, self.__A2)))
+                    print(
+                        "Cost after {} iterations: {}".format(
+                            i, self.cost(Y, self.__A2)
+                        )
+                    )
         if graph:
-            plt.plot(stepList, costList, 'b-')
-            plt.xlabel('iteration')
-            plt.ylabel('cost')
-            plt.title('Training Cost')
+            plt.plot(stepList, costList, "b-")
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
+            plt.title("Training Cost")
             plt.show()
         return self.evaluate(X, Y)

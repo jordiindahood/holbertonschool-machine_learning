@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 7"""
+"""script 7"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -79,8 +80,7 @@ class Neuron:
         self.__b = self.__b - alpha * db
 
     def train(
-        self, X, Y, iterations=5000,
-        alpha=0.05, verbose=True, graph=True, step=100
+        self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100
     ):
         """
         Train the neuron
@@ -108,8 +108,7 @@ class Neuron:
                 stepList.append(i)
                 if verbose:
                     print(
-                        "Cost after {} iterations: {}".format(
-                            i, self.cost(Y, self.__A))
+                        "Cost after {} iterations: {}".format(i, self.cost(Y, self.__A))
                     )
         if graph:
             plt.plot(stepList, costList, "b-")

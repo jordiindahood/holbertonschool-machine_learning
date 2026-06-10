@@ -3,7 +3,7 @@
 
 import tensorflow as tf
 
-SelfAttention = __import__('1-self_attention').SelfAttention
+SelfAttention = __import__("1-self_attention").SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
@@ -21,7 +21,7 @@ class RNNDecoder(tf.keras.layers.Layer):
 
         self.gru = tf.keras.layers.GRU(
             units,
-            recurrent_initializer='glorot_uniform',
+            recurrent_initializer="glorot_uniform",
             return_sequences=True,
             return_state=True,
         )

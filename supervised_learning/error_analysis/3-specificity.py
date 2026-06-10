@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" script 3 """
+"""script 3"""
+
 import numpy as np
 
 
@@ -12,4 +13,4 @@ def specificity(confusion):
     true_pos = np.diag(confusion)
     true_neg = confusion.sum() - (fal_pos + fal_neg + true_pos)
 
-    return (true_neg / (true_neg + fal_pos))
+    return true_neg / (true_neg + fal_pos)

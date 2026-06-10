@@ -5,7 +5,7 @@
 class Normal:
     """Class to represent a normal distribution"""
 
-    def __init__(self, data=None, mean=0., stddev=1.):
+    def __init__(self, data=None, mean=0.0, stddev=1.0):
         """Init"""
         if data is None:
             if stddev <= 0:
@@ -19,7 +19,7 @@ class Normal:
                 raise ValueError("data must contain multiple values")
             self.mean = float(sum(data) / len(data))
             variance = sum((x - self.mean) ** 2 for x in data) / len(data)
-            self.stddev = variance ** 0.5
+            self.stddev = variance**0.5
 
         self.e = 2.7182818285
         self.pi = 3.1415926536
@@ -35,15 +35,14 @@ class Normal:
     def pdf(self, x):
         """Calculates the value of the PDF for a given x-value"""
         coeff = 1 / (self.stddev * (2 * self.pi) ** 0.5)
-        exponent = -((x - self.mean) ** 2) / (2 * self.stddev ** 2)
-        return coeff * self.e ** exponent
+        exponent = -((x - self.mean) ** 2) / (2 * self.stddev**2)
+        return coeff * self.e**exponent
 
     def cdf(self, x):
         """Calculates the value of the CDF for a given x-value"""
-        z = (x - self.mean) / (self.stddev * 2 ** 0.5)
+        z = (x - self.mean) / (self.stddev * 2**0.5)
         # Taylor approximation of erf(z)
-        erf = (2 / (self.pi ** 0.5)) * (
-            z - (z ** 3) / 3 + (z ** 5) / 10 -
-            (z ** 7) / 42 + (z ** 9) / 216
+        erf = (2 / (self.pi**0.5)) * (
+            z - (z**3) / 3 + (z**5) / 10 - (z**7) / 42 + (z**9) / 216
         )
         return 0.5 * (1 + erf)

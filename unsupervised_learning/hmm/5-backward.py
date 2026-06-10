@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """script 5"""
+
 import numpy as np
 
 
@@ -19,16 +20,12 @@ def backward(Observation, Emission, Transition, Initial):
             return None, None
 
         B = np.zeros((N, T))
-        B[:, T - 1] = (
-            1  # At the last time step, the probability is 1 for all states
-        )
+        B[:, T - 1] = 1  # At the last time step, the probability is 1 for all states
 
         for t in reversed(range(T - 1)):
             for i in range(N):
                 B[i, t] = np.sum(
-                    Transition[i, :]
-                    * Emission[:, Observation[t + 1]]
-                    * B[:, t + 1]
+                    Transition[i, :] * Emission[:, Observation[t + 1]] * B[:, t + 1]
                 )
 
         P = np.sum(Initial[:, 0] * Emission[:, Observation[0]] * B[:, 0])

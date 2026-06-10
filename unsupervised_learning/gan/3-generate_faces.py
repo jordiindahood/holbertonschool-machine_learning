@@ -74,9 +74,7 @@ def convolutional_GenDiscr():
         Returns:
             keras.Model: Discriminator model
         """
-        input_layer = keras.Input(
-            shape=(16, 16, 1), name="input_discriminator"
-        )
+        input_layer = keras.Input(shape=(16, 16, 1), name="input_discriminator")
 
         # Conv block 1
         x = layers.Conv2D(32, kernel_size=3, padding="same")(input_layer)

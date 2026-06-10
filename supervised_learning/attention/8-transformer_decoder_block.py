@@ -4,7 +4,7 @@
 
 import tensorflow as tf
 
-MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
+MultiHeadAttention = __import__("6-multihead_attention").MultiHeadAttention
 
 
 class DecoderBlock(tf.keras.layers.Layer):
@@ -16,7 +16,7 @@ class DecoderBlock(tf.keras.layers.Layer):
         self.mha1 = MultiHeadAttention(dm, h)
         self.mha2 = MultiHeadAttention(dm, h)
 
-        self.dense_hidden = tf.keras.layers.Dense(hidden, activation='relu')
+        self.dense_hidden = tf.keras.layers.Dense(hidden, activation="relu")
         self.dense_output = tf.keras.layers.Dense(dm)
 
         self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
@@ -35,9 +35,7 @@ class DecoderBlock(tf.keras.layers.Layer):
         attn1 = self.dropout1(attn1, training=training)
         out1 = self.layernorm1(x + attn1)
 
-        attn2, _ = self.mha2(
-            out1, encoder_output, encoder_output, padding_mask
-        )
+        attn2, _ = self.mha2(out1, encoder_output, encoder_output, padding_mask)
         attn2 = self.dropout2(attn2, training=training)
         out2 = self.layernorm2(out1 + attn2)
 
@@ -59,9 +57,9 @@ class DecoderBlock(tf.keras.layers.Layer):
         encoder_output = args[1] if len(args) > 1 else None
 
         # Defaults
-        training = kwargs.get('training', None)
-        look_ahead_mask = kwargs.get('look_ahead_mask', None)
-        padding_mask = kwargs.get('padding_mask', None)
+        training = kwargs.get("training", None)
+        look_ahead_mask = kwargs.get("look_ahead_mask", None)
+        padding_mask = kwargs.get("padding_mask", None)
 
         # Override with positional if provided
         if len(args) > 2:
