@@ -27,9 +27,9 @@ def inception_network():
     )(X)
 
     # MaxPool 3x3 +n2(S)
-    my_layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(
-        my_layer
-    )
+    my_layer = K.layers.MaxPool2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(my_layer)
 
     # Conv 1x1 1(V)
     my_layer = K.layers.Conv2D(
@@ -52,18 +52,18 @@ def inception_network():
     )(my_layer)
 
     # Max pooling layer with kernels of shape 3x3 with 2x2 strides
-    my_layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(
-        my_layer
-    )
+    my_layer = K.layers.MaxPool2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(my_layer)
 
     my_layer = inception_block(my_layer, [64, 96, 128, 16, 32, 32])
 
     my_layer = inception_block(my_layer, [128, 128, 192, 32, 96, 64])
 
     # Max pooling layer with kernels of shape 3x3 with 2x2 strides
-    my_layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(
-        my_layer
-    )
+    my_layer = K.layers.MaxPool2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(my_layer)
 
     my_layer = inception_block(my_layer, [192, 96, 208, 16, 48, 64])
     my_layer = inception_block(my_layer, [160, 112, 224, 24, 64, 64])
@@ -72,15 +72,17 @@ def inception_network():
     my_layer = inception_block(my_layer, [256, 160, 320, 32, 128, 128])
 
     # Max pooling layer with kernels of shape 3x3 with 2x2 strides
-    my_layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(
-        my_layer
-    )
+    my_layer = K.layers.MaxPool2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(my_layer)
 
     my_layer = inception_block(my_layer, [256, 160, 320, 32, 128, 128])
     my_layer = inception_block(my_layer, [384, 192, 384, 48, 128, 128])
 
     # Avg pooling layer with kernels of shape 7x7
-    my_layer = K.layers.AveragePooling2D(pool_size=(7, 7), padding="same")(my_layer)
+    my_layer = K.layers.AveragePooling2D(pool_size=(7, 7), padding="same")(
+        my_layer
+    )
 
     my_layer = K.layers.Dropout(rate=0.4)(my_layer)
 

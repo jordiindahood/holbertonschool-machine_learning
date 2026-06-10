@@ -28,18 +28,22 @@ def densenet121(growth_rate=32, compression=1.0):
         kernel_initializer=initializer,
     )(myLayer)
 
-    myLayer = K.layers.MaxPooling2D(pool_size=(3, 3), padding="same", strides=(2, 2))(
-        myLayer
-    )
+    myLayer = K.layers.MaxPooling2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(myLayer)
 
     nb_filters = 2 * growth_rate
 
     myLayer, nb_filters = dense_block(myLayer, nb_filters, growth_rate, 6)
 
     for layer in layers:
-        myLayer, nb_filters = transition_layer(myLayer, nb_filters, compression)
+        myLayer, nb_filters = transition_layer(
+            myLayer, nb_filters, compression
+        )
 
-        myLayer, nb_filters = dense_block(myLayer, nb_filters, growth_rate, layer)
+        myLayer, nb_filters = dense_block(
+            myLayer, nb_filters, growth_rate, layer
+        )
 
     myLayer = K.layers.AveragePooling2D(pool_size=(7, 7))(myLayer)
 

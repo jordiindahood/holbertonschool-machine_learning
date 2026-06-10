@@ -42,7 +42,9 @@ class DeepNeuralNetwork:
                 self.__weights["W1"] = np.random.randn(layers[i], nx) * x
             else:
                 x = np.sqrt(2 / layers[i - 1])
-                self.__weights[W_key] = np.random.randn(layers[i], layers[i - 1]) * x
+                self.__weights[W_key] = (
+                    np.random.randn(layers[i], layers[i - 1]) * x
+                )
 
     @property
     def L(self):

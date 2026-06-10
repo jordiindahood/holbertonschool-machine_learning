@@ -146,9 +146,9 @@ class Yolo:
 
     def iou(self, x1, x2, y1, y2, pos1, pos2, area):
         """
-        Calculates the Intersection over Union (IoU) between two bounding boxes.
+        Calculates the Intersection over Union (IoU) between two bounding boxes.  # noqa: E501
 
-        representing the ratio of overlap to the total area covered by both boxes.
+        representing the ratio of overlap to the total area covered by both boxes.  # noqa: E501
         """
 
         # find the coordinates

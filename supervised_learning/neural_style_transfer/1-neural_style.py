@@ -54,14 +54,20 @@ class NST:
             ndarrays or don't have shape (h, w, 3).
             TypeError: If alpha or beta are not non-negative numbers.
         """
-        if not isinstance(style_image, np.ndarray) or style_image.shape[-1] != 3:
+        if (
+            not isinstance(style_image, np.ndarray)
+            or style_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "style_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
         else:
             self.style_image = self.scale_image(style_image)
 
-        if not isinstance(content_image, np.ndarray) or content_image.shape[-1] != 3:
+        if (
+            not isinstance(content_image, np.ndarray)
+            or content_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "content_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
@@ -100,7 +106,9 @@ class NST:
             or doesn't have shape (h, w, 3).
         """
         if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
-            raise (TypeError("image must be a numpy.ndarray with shape (h, w, 3)"))
+            raise (
+                TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
+            )
 
         h, w, _ = image.shape
 
@@ -111,7 +119,9 @@ class NST:
             h_new = 512
             w_new = int((w * 512) / h)
 
-        resized_image = tf.image.resize(image, size=[h_new, w_new], method="bicubic")
+        resized_image = tf.image.resize(
+            image, size=[h_new, w_new], method="bicubic"
+        )
 
         # Normalize
         resized_image = resized_image / 255.0
@@ -146,14 +156,18 @@ class NST:
             None: The method assigns the loaded model to `self.model`.
         """
         # Keras API
-        modelVGG19 = tf.keras.applications.VGG19(include_top=False, weights="imagenet")
+        modelVGG19 = tf.keras.applications.VGG19(
+            include_top=False, weights="imagenet"
+        )
 
         modelVGG19.trainable = False
 
         # selected layers
         selected_layers = self.style_layers + [self.content_layer]
 
-        outputs = [modelVGG19.get_layer(name).output for name in selected_layers]
+        outputs = [
+            modelVGG19.get_layer(name).output for name in selected_layers
+        ]
 
         # construct model
         model = tf.keras.Model([modelVGG19.input], outputs)

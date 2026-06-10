@@ -3,7 +3,7 @@
 Node = __import__("6-build_decision_tree").Node
 Leaf = __import__("6-build_decision_tree").Leaf
 Decision_Tree = __import__("6-build_decision_tree").Decision_Tree
-import numpy as np
+import numpy as np  # noqa: E402
 
 
 def random_tree(max_depth, n_classes, n_features, seed=0):
@@ -22,8 +22,12 @@ def random_tree(max_depth, n_classes, n_features, seed=0):
             2,
         )
         if node.depth == max_depth - 1:
-            node.left_child = Leaf(depth=max_depth, value=rng.integers(0, n_classes))
-            node.right_child = Leaf(depth=max_depth, value=rng.integers(0, n_classes))
+            node.left_child = Leaf(
+                depth=max_depth, value=rng.integers(0, n_classes)
+            )
+            node.right_child = Leaf(
+                depth=max_depth, value=rng.integers(0, n_classes)
+            )
         else:
             node.left_child = Node(depth=node.depth + 1)
             node.left_child.lower = node.lower.copy()
@@ -39,7 +43,11 @@ def random_tree(max_depth, n_classes, n_features, seed=0):
     T = Decision_Tree(root=root)
     build_children(root)
 
-    A = rng.uniform(0, 1, size=100 * n_features).reshape([100, n_features]) * 200 - 100
+    A = (
+        rng.uniform(0, 1, size=100 * n_features).reshape([100, n_features])
+        * 200
+        - 100
+    )
     return T, A
 
 

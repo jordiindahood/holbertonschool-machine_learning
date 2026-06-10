@@ -42,7 +42,9 @@ class DeepNeuralNetwork:
                 self.__weights["W1"] = np.random.randn(layers[i], nx) * x
             else:
                 x = np.sqrt(2 / layers[i - 1])
-                self.__weights[W_key] = np.random.randn(layers[i], layers[i - 1]) * x
+                self.__weights[W_key] = (
+                    np.random.randn(layers[i], layers[i - 1]) * x
+                )
 
     @property
     def L(self):
@@ -83,5 +85,8 @@ class DeepNeuralNetwork:
         """
         Calculates the cost of the model using logistic regression.
         """
-        cost = -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
+        cost = (
+            -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A)))
+            / Y.shape[1]
+        )
         return cost

@@ -18,7 +18,9 @@ def kmeans(X, k, iterations=1000):
         return None, None
 
     n, d = X.shape
-    centroids = np.random.uniform(np.min(X, axis=0), np.max(X, axis=0), size=(k, d))
+    centroids = np.random.uniform(
+        np.min(X, axis=0), np.max(X, axis=0), size=(k, d)
+    )
     for i in range(iterations):
         copy = centroids.copy()
         D = np.sqrt(((X - centroids[:, np.newaxis]) ** 2).sum(axis=2))

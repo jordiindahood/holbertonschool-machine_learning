@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 Decision_Tree = __import__("7-build_decision_tree").Decision_Tree
-import numpy as np
-from sklearn import datasets
+import numpy as np  # noqa: E402
+from sklearn import datasets  # noqa: E402
 
 #                                     #########################
 #                                     # Generating examples : #
@@ -14,8 +14,8 @@ def circle_of_clouds(
 ):
     """
     This function returns a dataset made of 'n_clouds' classes.
-    Each class is a small gaussian cloud containing 'n_objects_by_cloud' points.
-    The centers of the clouds are regularly disposed on a circle of radius 'radius' (and center (0,0)).
+    Each class is a small gaussian cloud containing 'n_objects_by_cloud' points.  # noqa: E501
+    The centers of the clouds are regularly disposed on a circle of radius 'radius' (and center (0,0)).  # noqa: E501
     The spreadth of the clouds is governed by 'sigma'.
     """
     rng = np.random.default_rng(seed)
@@ -24,7 +24,9 @@ def circle_of_clouds(
 
     def rotate(x, k):
         theta = 2 * k * np.pi / n_clouds + angle
-        m = np.matrix([[np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]])
+        m = np.matrix(
+            [[np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]]
+        )
         return np.matmul(x, m)
 
     def cloud():
@@ -34,17 +36,20 @@ def circle_of_clouds(
 
     def target():
         return np.array(
-            ([[i] * n_objects_by_cloud for i in range(n_clouds)]), dtype="int32"
+            ([[i] * n_objects_by_cloud for i in range(n_clouds)]),
+            dtype="int32",
         ).ravel()
 
     return (
-        np.concatenate([np.array(rotate(cloud(), k)) for k in range(n_clouds)], axis=0),
+        np.concatenate(
+            [np.array(rotate(cloud(), k)) for k in range(n_clouds)], axis=0
+        ),
         target(),
     )
 
 
 def iris():
-    """Returns the explanatory features and the target of the famous iris dataset"""
+    """Returns the explanatory features and the target of the famous iris dataset"""  # noqa: E501
     iris = datasets.load_iris()
     return iris.data, iris.target
 
@@ -61,9 +66,11 @@ def wine():
 
 
 def split(explanatory, target, seed=0, proportion=0.1):
-    """Returns a dictionary containing a a training dataset and a test dataset"""
+    """Returns a dictionary containing a a training dataset and a test dataset"""  # noqa: E501
     rng = np.random.default_rng(seed)
-    test_indices = rng.choice(target.size, int(target.size * proportion), replace=False)
+    test_indices = rng.choice(
+        target.size, int(target.size * proportion), replace=False
+    )
     test_filter = np.zeros_like(target, dtype="bool")
     test_filter[test_indices] = True
 
@@ -86,7 +93,7 @@ for d, name in zip(
     T.fit(d["train_explanatory"], d["train_target"], verbose=1)
     T.update_predict()
     print(
-        f"    - Accuracy on test          : {T.accuracy(d['test_explanatory'],d['test_target'])}"
+        f"    - Accuracy on test          : {T.accuracy(d['test_explanatory'], d['test_target'])}"  # noqa: E501
     )
 print("-" * 52)
 """$ ./7-main_1.py

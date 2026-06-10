@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 Decision_Tree = __import__("7-build_decision_tree").Decision_Tree
-import numpy as np
-import matplotlib.pyplot as plt
+import numpy as np  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
 
 #                                     #########################
 #                                     # Generating examples : #
@@ -14,8 +14,8 @@ def circle_of_clouds(
 ):
     """
     This function returns a dataset made of 'n_clouds' classes.
-    Each class is a small gaussian cloud containing 'n_objects_by_cloud' points.
-    The centers of the clouds are regularly disposed on a circle of radius 'radius' (and center (0,0)).
+    Each class is a small gaussian cloud containing 'n_objects_by_cloud' points.  # noqa: E501
+    The centers of the clouds are regularly disposed on a circle of radius 'radius' (and center (0,0)).  # noqa: E501
     The spreadth of the clouds is governed by 'sigma'.
     """
     rng = np.random.default_rng(seed)
@@ -24,7 +24,9 @@ def circle_of_clouds(
 
     def rotate(x, k):
         theta = 2 * k * np.pi / n_clouds + angle
-        m = np.matrix([[np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]])
+        m = np.matrix(
+            [[np.cos(theta), np.sin(theta)], [-np.sin(theta), np.cos(theta)]]
+        )
         return np.matmul(x, m)
 
     def cloud():
@@ -34,11 +36,14 @@ def circle_of_clouds(
 
     def target():
         return np.array(
-            ([[i] * n_objects_by_cloud for i in range(n_clouds)]), dtype="int32"
+            ([[i] * n_objects_by_cloud for i in range(n_clouds)]),
+            dtype="int32",
         ).ravel()
 
     return (
-        np.concatenate([np.array(rotate(cloud(), k)) for k in range(n_clouds)], axis=0),
+        np.concatenate(
+            [np.array(rotate(cloud(), k)) for k in range(n_clouds)], axis=0
+        ),
         target(),
     )
 
@@ -69,12 +74,15 @@ def visualize_training_dataset_2D(ax, model, cmap):
     """color the points of the 'explanatory' array
     with the color corresponding to the class stored in 'target'"""
     ax.scatter(
-        model.explanatory[:, 0], model.explanatory[:, 1], c=model.target, cmap=cmap
+        model.explanatory[:, 0],
+        model.explanatory[:, 1],
+        c=model.target,
+        cmap=cmap,
     )
 
 
 def visualize_model_2D(model, cmap=plt.cm.Set1):
-    """gather the results of visualize_bassins and visualize_training_dataset_2D"""
+    """gather the results of visualize_bassins and visualize_training_dataset_2D"""  # noqa: E501
     assert model.explanatory.shape[1] == 2, "Not a 2D example"
 
     x_min, x_max = np_extrema(model.explanatory[:, 0])

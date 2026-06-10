@@ -32,7 +32,9 @@ def lenet5(X):
             K.layers.Dense(
                 units=120, activation="relu", kernel_initializer=initializer
             ),
-            K.layers.Dense(units=84, activation="relu", kernel_initializer=initializer),
+            K.layers.Dense(
+                units=84, activation="relu", kernel_initializer=initializer
+            ),
             K.layers.Dense(
                 units=10, activation="softmax", kernel_initializer=initializer
             ),

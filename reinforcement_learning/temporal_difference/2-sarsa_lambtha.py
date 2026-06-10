@@ -85,7 +85,9 @@ def sarsa_lambtha(
             new_action = epsilon_greedy(Q, new_state, epsilon)
 
             # TD Error (δ): reward + gamma * V(next_state) - V(state)
-            delta = reward + (gamma * Q[new_state, new_action]) - Q[state, action]
+            delta = (
+                reward + (gamma * Q[new_state, new_action]) - Q[state, action]
+            )
 
             # Update eligibility traces
             eligibility_traces[state, action] += 1

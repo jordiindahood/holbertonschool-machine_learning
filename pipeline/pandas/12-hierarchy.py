@@ -26,7 +26,9 @@ def hierarchy(df1, df2):
     df2_slice = df2.loc[(df2.index >= start) & (df2.index <= end)]
 
     # Concatenate using keys (bitstamp first, then coinbase)
-    combined = pd.concat([df2_slice, df1_slice], keys=["bitstamp", "coinbase"], axis=0)
+    combined = pd.concat(
+        [df2_slice, df1_slice], keys=["bitstamp", "coinbase"], axis=0
+    )
 
     # Swap levels so Timestamp becomes the first level
     combined = combined.swaplevel(0, 1)

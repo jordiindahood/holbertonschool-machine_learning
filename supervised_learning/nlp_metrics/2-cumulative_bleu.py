@@ -11,7 +11,7 @@ def cumulative_bleu(references, sentence, n):
     """
 
     def ngrams(seq, n):
-        return [tuple(seq[i : i + n]) for i in range(len(seq) - n + 1)]
+        return [tuple(seq[i: i + n]) for i in range(len(seq) - n + 1)]
 
     precisions = []
     for i in range(1, n + 1):
@@ -24,7 +24,9 @@ def cumulative_bleu(references, sentence, n):
         for ref in references:
             ref_ngrams = Counter(ngrams(ref, i))
             for ngram in ref_ngrams:
-                max_ref_counts[ngram] = max(max_ref_counts[ngram], ref_ngrams[ngram])
+                max_ref_counts[ngram] = max(
+                    max_ref_counts[ngram], ref_ngrams[ngram]
+                )
 
         # Clipped counts
         clipped = {

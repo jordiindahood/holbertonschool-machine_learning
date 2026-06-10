@@ -24,7 +24,9 @@ def lenet5(x, y):
     )
 
     # Layer 2: Max Pooling
-    pool1 = tf.compat.v1.layers.max_pooling2d(inputs=conv1, pool_size=2, strides=2)
+    pool1 = tf.compat.v1.layers.max_pooling2d(
+        inputs=conv1, pool_size=2, strides=2
+    )
 
     # Layer 3: Conv -> ReLU
     conv2 = tf.compat.v1.layers.conv2d(
@@ -37,14 +39,19 @@ def lenet5(x, y):
     )
 
     # Layer 4: Max Pooling
-    pool2 = tf.compat.v1.layers.max_pooling2d(inputs=conv2, pool_size=2, strides=2)
+    pool2 = tf.compat.v1.layers.max_pooling2d(
+        inputs=conv2, pool_size=2, strides=2
+    )
 
     # Flatten
     flat = tf.compat.v1.layers.flatten(pool2)
 
     # Layer 5: Fully Connected -> ReLU
     fc1 = tf.compat.v1.layers.dense(
-        inputs=flat, units=120, activation=tf.nn.relu, kernel_initializer=he_init
+        inputs=flat,
+        units=120,
+        activation=tf.nn.relu,
+        kernel_initializer=he_init,
     )
 
     # Layer 6: Fully Connected -> ReLU
@@ -53,7 +60,9 @@ def lenet5(x, y):
     )
 
     # Output Layer: Fully Connected -> Softmax
-    logits = tf.compat.v1.layers.dense(inputs=fc2, units=10, kernel_initializer=he_init)
+    logits = tf.compat.v1.layers.dense(
+        inputs=fc2, units=10, kernel_initializer=he_init
+    )
 
     # Softmax output
     y_pred = tf.nn.softmax(logits)

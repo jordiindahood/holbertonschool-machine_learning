@@ -25,7 +25,9 @@ class Transformer(tf.keras.Model):
     ):
         """init"""
         super().__init__()
-        self.encoder = Encoder(N, dm, h, hidden, input_vocab, max_seq_input, drop_rate)
+        self.encoder = Encoder(
+            N, dm, h, hidden, input_vocab, max_seq_input, drop_rate
+        )
         self.decoder = Decoder(
             N, dm, h, hidden, target_vocab, max_seq_target, drop_rate
         )

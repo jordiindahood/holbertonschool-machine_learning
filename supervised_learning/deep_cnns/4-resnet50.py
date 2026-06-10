@@ -26,7 +26,9 @@ def resnet50():
     layer = K.layers.BatchNormalization(axis=3)(layer)
     layer = K.layers.ReLU()(layer)
 
-    layer = K.layers.MaxPool2D(pool_size=(3, 3), padding="same", strides=(2, 2))(layer)
+    layer = K.layers.MaxPool2D(
+        pool_size=(3, 3), padding="same", strides=(2, 2)
+    )(layer)
 
     layer = projection_block(layer, [64, 64, 256], 1)
     for i in range(2):

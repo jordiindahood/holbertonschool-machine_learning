@@ -224,7 +224,9 @@ class Node:
                 indicating if each individual meets the condition.
             """
             return np.all(
-                np.array([x[:, key] > self.lower[key] for key in self.lower.keys()]),
+                np.array(
+                    [x[:, key] > self.lower[key] for key in self.lower.keys()]
+                ),
                 axis=0,
             )
 
@@ -243,7 +245,9 @@ class Node:
                 if each individual meets the condition.
             """
             return np.all(
-                np.array([x[:, key] <= self.upper[key] for key in self.upper.keys()]),
+                np.array(
+                    [x[:, key] <= self.upper[key] for key in self.upper.keys()]
+                ),
                 axis=0,
             )
 
@@ -394,7 +398,12 @@ class Decision_Tree:
     """
 
     def __init__(
-        self, max_depth=10, min_pop=1, seed=0, split_criterion="random", root=None
+        self,
+        max_depth=10,
+        min_pop=1,
+        seed=0,
+        split_criterion="random",
+        root=None,
     ):
         """
         Initializes a Decision_Tree with the given parameters.
@@ -483,7 +492,8 @@ class Decision_Tree:
         for leaf in leaves:
             leaf.update_indicator()
         self.predict = lambda A: np.sum(
-            np.array([leaf.indicator(A) * leaf.value for leaf in leaves]), axis=0
+            np.array([leaf.indicator(A) * leaf.value for leaf in leaves]),
+            axis=0,
         )
 
     def pred(self, x):
@@ -762,7 +772,9 @@ class Decision_Tree:
             left_size = np.sum(left_indices)
             right_size = np.sum(right_indices)
             total_size = left_size + right_size
-            gini_sum1 = (gini_left * left_size + gini_right * right_size) / total_size
+            gini_sum1 = (
+                gini_left * left_size + gini_right * right_size
+            ) / total_size
             gini_sum.append(gini_sum1)
 
         min_index = np.argmin(gini_sum)

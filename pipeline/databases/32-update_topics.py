@@ -3,6 +3,6 @@
 
 
 def update_topics(mongo_collection, name, topics):
-    """Function that changes all topics of a school document based on the name"""
+    """Function that changes all topics of a school document based on the name"""  # noqa: E501
     aux = {"$set": {"topics": topics}}
     mongo_collection.update_many({"name": name}, aux)

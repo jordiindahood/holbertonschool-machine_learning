@@ -7,7 +7,7 @@ import requests
 def get_first_launch():
     """
     Fetches all SpaceX launches and prints the first launch in the format:
-    <launch name> (<date>) <rocket name> - <launchpad name> (<launchpad locality>)
+    <launch name> (<date>) <rocket name> - <launchpad name> (<launchpad locality>)  # noqa: E501
     """
     launches_url = "https://api.spacexdata.com/v4/launches"
     rockets_url = "https://api.spacexdata.com/v4/rockets/"
@@ -39,7 +39,9 @@ def get_first_launch():
     lp_name = launchpad_data.get("name", "unknown")
     lp_locality = launchpad_data.get("locality", "unknown")
 
-    print(f"{launch_name} ({launch_date}) {rocket_name} - {lp_name} ({lp_locality})")
+    print(
+        f"{launch_name} ({launch_date}) {rocket_name} - {lp_name} ({lp_locality})"  # noqa: E501
+    )
 
 
 if __name__ == "__main__":

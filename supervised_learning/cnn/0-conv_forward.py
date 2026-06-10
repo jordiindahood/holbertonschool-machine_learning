@@ -58,9 +58,11 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                 # element-wise multiplication of the kernel and the image
                 output[:, y, x, v] = (
                     W[:, :, :, v]
-                    * images[:, y * sh : y * sh + kh, x * sw : x * sw + kw, :]
+                    * images[:, y * sh: y * sh + kh, x * sw: x * sw + kw, :]
                 ).sum(axis=(1, 2, 3))
 
-                output[:, y, x, v] = activation(output[:, y, x, v] + b[0, 0, 0, v])
+                output[:, y, x, v] = activation(
+                    output[:, y, x, v] + b[0, 0, 0, v]
+                )
 
     return output

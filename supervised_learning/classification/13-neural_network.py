@@ -85,7 +85,10 @@ class NeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         """
-        cost = -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
+        cost = (
+            -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A)))
+            / Y.shape[1]
+        )
         return cost
 
     def evaluate(self, X, Y):

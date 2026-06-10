@@ -14,10 +14,14 @@ def autoencoder(input_dim, hidden_units, latent_dim):
     hidden_layer = input_layer
 
     for units in hidden_units:
-        hidden_layer = keras.layers.Dense(units, activation="relu")(hidden_layer)
+        hidden_layer = keras.layers.Dense(units, activation="relu")(
+            hidden_layer
+        )
 
     mean_layer = keras.layers.Dense(latent_dim, activation=None)(hidden_layer)
-    log_var_layer = keras.layers.Dense(latent_dim, activation=None)(hidden_layer)
+    log_var_layer = keras.layers.Dense(latent_dim, activation=None)(
+        hidden_layer
+    )
 
     def reparametrize(args):
         """
@@ -30,7 +34,9 @@ def autoencoder(input_dim, hidden_units, latent_dim):
         noise = tf.random.normal(shape=(batch_size, latent_size))
         return mean + tf.exp(0.5 * log_var) * noise
 
-    latent_sample = keras.layers.Lambda(reparametrize)([mean_layer, log_var_layer])
+    latent_sample = keras.layers.Lambda(reparametrize)(
+        [mean_layer, log_var_layer]
+    )
 
     encoder_model = keras.Model(
         inputs=input_layer,
@@ -42,9 +48,13 @@ def autoencoder(input_dim, hidden_units, latent_dim):
     hidden_decoded = decoder_input
 
     for units in reversed(hidden_units):
-        hidden_decoded = keras.layers.Dense(units, activation="relu")(hidden_decoded)
+        hidden_decoded = keras.layers.Dense(units, activation="relu")(
+            hidden_decoded
+        )
 
-    output_layer = keras.layers.Dense(input_dim, activation="sigmoid")(hidden_decoded)
+    output_layer = keras.layers.Dense(input_dim, activation="sigmoid")(
+        hidden_decoded
+    )
 
     decoder_model = keras.Model(
         inputs=decoder_input, outputs=output_layer, name="decoder"
@@ -53,7 +63,9 @@ def autoencoder(input_dim, hidden_units, latent_dim):
     final_output = decoder_model(encoder_model(input_layer)[0])
     vae = keras.Model(inputs=input_layer, outputs=final_output, name="vae")
 
-    reconstruction_loss = keras.losses.binary_crossentropy(input_layer, final_output)
+    reconstruction_loss = keras.losses.binary_crossentropy(
+        input_layer, final_output
+    )
     reconstruction_loss *= input_dim
 
     kl_divergence_loss = (

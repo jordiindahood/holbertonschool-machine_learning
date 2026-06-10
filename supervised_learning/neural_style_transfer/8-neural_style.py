@@ -55,14 +55,20 @@ class NST:
             TypeError: If alpha or beta are not non-negative numbers.
         """
 
-        if not isinstance(style_image, np.ndarray) or style_image.shape[-1] != 3:
+        if (
+            not isinstance(style_image, np.ndarray)
+            or style_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "style_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
         else:
             self.style_image = self.scale_image(style_image)
 
-        if not isinstance(content_image, np.ndarray) or content_image.shape[-1] != 3:
+        if (
+            not isinstance(content_image, np.ndarray)
+            or content_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "content_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
@@ -81,7 +87,9 @@ class NST:
 
         self.model = None
         self.load_model()
-        self.gram_style_features, self.content_feature = self.generate_features()
+        self.gram_style_features, self.content_feature = (
+            self.generate_features()
+        )
 
     @staticmethod
     def scale_image(image):
@@ -102,7 +110,9 @@ class NST:
             or doesn't have shape (h, w, 3).
         """
         if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
-            raise (TypeError("image must be a numpy.ndarray with shape (h, w, 3)"))
+            raise (
+                TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
+            )
 
         h, w, _ = image.shape
 
@@ -113,7 +123,9 @@ class NST:
             h_new = 512
             w_new = int((w * 512) / h)
 
-        resized_image = tf.image.resize(image, size=[h_new, w_new], method="bicubic")
+        resized_image = tf.image.resize(
+            image, size=[h_new, w_new], method="bicubic"
+        )
 
         # Normalize
         resized_image = resized_image / 255.0
@@ -148,14 +160,18 @@ class NST:
             None: The method assigns the loaded model to `self.model`.
         """
         # Keras API
-        modelVGG19 = tf.keras.applications.VGG19(include_top=False, weights="imagenet")
+        modelVGG19 = tf.keras.applications.VGG19(
+            include_top=False, weights="imagenet"
+        )
 
         modelVGG19.trainable = False
 
         # selected layers
         selected_layers = self.style_layers + [self.content_layer]
 
-        outputs = [modelVGG19.get_layer(name).output for name in selected_layers]
+        outputs = [
+            modelVGG19.get_layer(name).output for name in selected_layers
+        ]
 
         # construct model
         model = tf.keras.Model([modelVGG19.input], outputs)
@@ -208,7 +224,9 @@ class NST:
         input_layer_reshaped = tf.reshape(input_layer, (h * w, c))
 
         # Compute the gram matrix
-        gram = tf.matmul(input_layer_reshaped, input_layer_reshaped, transpose_a=True)
+        gram = tf.matmul(
+            input_layer_reshaped, input_layer_reshaped, transpose_a=True
+        )
 
         # Normalize the gram matrix
         gram_matrix = tf.expand_dims(gram / tf.cast(h * w, tf.float32), axis=0)
@@ -265,18 +283,18 @@ class NST:
 
     def layer_style_cost(self, style_output, gram_target):
         """
-        Calculates the style cost for a single layer in the style transfer process.
+        Calculates the style cost for a single layer in the style transfer process.  # noqa: E501
 
         The style cost measures the difference between the Gram matrix of the
         layer's style output and the Gram matrix of the target style.
-        The smaller the difference, the more closely the current image resembles
+        The smaller the difference, the more closely the current image resembles  # noqa: E501
         the target style.
 
             Args:
             style_output (tf.Tensor or tf.Variable): A 4D tensor representing
             the style features output from the current layer of the neural
             network. Must have shape (batch_size, height, width, channels).
-            gram_target (tf.Tensor or tf.Variable): The Gram matrix of the target
+            gram_target (tf.Tensor or tf.Variable): The Gram matrix of the target  # noqa: E501
             style for the given layer, with shape (1, channels, channels).
 
             Returns:
@@ -302,13 +320,17 @@ class NST:
             gram_target, (tf.Tensor, tf.Variable)
         ) or gram_target.shape != [1, c, c]:
             raise TypeError(
-                "gram_target must be a tensor of shape [1, {}, {}]".format(c, c)
+                "gram_target must be a tensor of shape [1, {}, {}]".format(
+                    c, c
+                )
             )
 
         output_gram_style = self.gram_matrix(style_output)
 
         # difference between two gram matrix
-        layer_style_cost = tf.reduce_mean(tf.square(output_gram_style - gram_target))
+        layer_style_cost = tf.reduce_mean(
+            tf.square(output_gram_style - gram_target)
+        )
 
         return layer_style_cost
 
@@ -322,8 +344,8 @@ class NST:
         to the total cost is weighted equally.
 
         Args:
-            style_outputs (list): A list of tensors, each representing the style
-                features from one of the specified style layers in the generated
+            style_outputs (list): A list of tensors, each representing the style  # noqa: E501
+                features from one of the specified style layers in the generated  # noqa: E501
                 image. The length of this list must match the number of layers
                 specified in `self.style_layers`.
 
@@ -348,7 +370,9 @@ class NST:
         cost_total = sum(
             [
                 weight * self.layer_style_cost(style, target)
-                for style, target in zip(style_outputs, self.gram_style_features)
+                for style, target in zip(
+                    style_outputs, self.gram_style_features
+                )
             ]
         )
 
@@ -363,7 +387,7 @@ class NST:
         generated image and the target content image, using mean squared error.
 
         Args:
-            content_output (tf.Tensor or tf.Variable): A tensor representing the
+            content_output (tf.Tensor or tf.Variable): A tensor representing the  # noqa: E501
                 content features extracted from the specified content layer
                 of the generated image. This tensor must have the same shape
                 as `self.content_feature`.
@@ -385,7 +409,9 @@ class NST:
                 )
             )
 
-        content_cost = tf.reduce_mean(tf.square(content_output - self.content_feature))
+        content_cost = tf.reduce_mean(
+            tf.square(content_output - self.content_feature)
+        )
 
         return content_cost
 
@@ -400,7 +426,7 @@ class NST:
         the `alpha` and `beta` factors.
 
         Args:
-            generated_image (tf.Tensor): A tensor representing the generated image
+            generated_image (tf.Tensor): A tensor representing the generated image  # noqa: E501
                 to be evaluated, with the same shape as `self.content_image`.
 
         Returns:
@@ -430,8 +456,8 @@ class NST:
             )
 
         # preprocess generated img
-        preprocess_generated_image = tf.keras.applications.vgg19.preprocess_input(
-            generated_image * 255
+        preprocess_generated_image = (
+            tf.keras.applications.vgg19.preprocess_input(generated_image * 255)
         )
 
         # calculate content and style for generated image
@@ -452,9 +478,9 @@ class NST:
             Computes the gradients of the total cost with respect to the
             generated image.
 
-        This method leverages TensorFlow's `GradientTape` to compute the gradient
-        of the total neural style transfer cost (combining content and style costs)
-        with respect to the input `generated_image`. This gradient information is
+        This method leverages TensorFlow's `GradientTape` to compute the gradient  # noqa: E501
+        of the total neural style transfer cost (combining content and style costs)  # noqa: E501
+        with respect to the input `generated_image`. This gradient information is  # noqa: E501
         essential for optimizing the generated image iteratively.
 
         Args:
@@ -465,7 +491,7 @@ class NST:
 
         Returns:
             tuple: Contains four elements:
-                - grad (tf.Tensor): The computed gradient tensor of the total cost
+                - grad (tf.Tensor): The computed gradient tensor of the total cost  # noqa: E501
                   with respect to `generated_image`.
                 - total_cost (tf.Tensor): A scalar tensor representing the
                   total neural style transfer cost.

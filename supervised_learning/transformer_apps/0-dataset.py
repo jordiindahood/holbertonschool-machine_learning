@@ -24,7 +24,9 @@ class Dataset:
             split="validation",
             as_supervised=True,
         )
-        self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(self.data_train)
+        self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(
+            self.data_train
+        )
 
     def tokenize_dataset(self, data):
         """
@@ -34,7 +36,9 @@ class Dataset:
         tokenizer_pt = transformers.AutoTokenizer.from_pretrained(
             "neuralmind/bert-base-portuguese-cased"
         )
-        tokenizer_en = transformers.AutoTokenizer.from_pretrained("bert-base-uncased")
+        tokenizer_en = transformers.AutoTokenizer.from_pretrained(
+            "bert-base-uncased"
+        )
 
         def iterate_pt():
             """iterate portuguese"""

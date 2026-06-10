@@ -85,7 +85,10 @@ class NeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         """
-        cost = -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A))) / Y.shape[1]
+        cost = (
+            -np.sum((Y * np.log(A)) + ((1 - Y) * np.log(1.0000001 - A)))
+            / Y.shape[1]
+        )
         return cost
 
     def evaluate(self, X, Y):
@@ -116,7 +119,14 @@ class NeuralNetwork:
         self.__b1 = self.__b1 - alpha * db1
 
     def train(
-        self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100
+        self,
+        X,
+        Y,
+        iterations=5000,
+        alpha=0.05,
+        verbose=True,
+        graph=True,
+        step=100,
     ):
         """
         Train the neuron

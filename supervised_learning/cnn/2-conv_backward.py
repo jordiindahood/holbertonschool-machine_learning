@@ -41,14 +41,14 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                 for v in range(c_new):
                     aux_W = W[:, :, :, v]
                     aux_dz = dZ[z, y, x, v]
-                    dA[z, y * sh : y * sh + kh, x * sw : x * sw + kw, :] += (
+                    dA[z, y * sh: y * sh + kh, x * sw: x * sw + kw, :] += (
                         aux_dz * aux_W
                     )
                     aux_A_prev = A_prev[
-                        z, y * sh : y * sh + kh, x * sw : x * sw + kw, :
+                        z, y * sh: y * sh + kh, x * sw: x * sw + kw, :
                     ]
                     dW[:, :, :, v] += aux_A_prev * aux_dz
 
-    dA = dA[:, ph : dA.shape[1] - ph, pw : dA.shape[2] - pw, :]
+    dA = dA[:, ph: dA.shape[1] - ph, pw: dA.shape[2] - pw, :]
 
     return dA, dW, db

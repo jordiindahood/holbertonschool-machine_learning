@@ -26,14 +26,20 @@ class NST:
         and loss weights.
         """
 
-        if not isinstance(style_image, np.ndarray) or style_image.shape[-1] != 3:
+        if (
+            not isinstance(style_image, np.ndarray)
+            or style_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "style_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
         else:
             self.style_image = self.scale_image(style_image)
 
-        if not isinstance(content_image, np.ndarray) or content_image.shape[-1] != 3:
+        if (
+            not isinstance(content_image, np.ndarray)
+            or content_image.shape[-1] != 3
+        ):
             raise TypeError(
                 "content_image must be a numpy.ndarray" " with shape (h, w, 3)"
             )
@@ -52,7 +58,9 @@ class NST:
 
         self.model = None
         self.load_model()
-        self.gram_style_features, self.content_feature = self.generate_features()
+        self.gram_style_features, self.content_feature = (
+            self.generate_features()
+        )
 
     @staticmethod
     def scale_image(image):
@@ -61,7 +69,9 @@ class NST:
         and its largest side is 512 pixels.
         """
         if not isinstance(image, np.ndarray) or image.shape[-1] != 3:
-            raise (TypeError("image must be a numpy.ndarray with shape (h, w, 3)"))
+            raise (
+                TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
+            )
 
         h, w, _ = image.shape
 
@@ -72,7 +82,9 @@ class NST:
             h_new = 512
             w_new = int((w * 512) / h)
 
-        resized_image = tf.image.resize(image, size=[h_new, w_new], method="bicubic")
+        resized_image = tf.image.resize(
+            image, size=[h_new, w_new], method="bicubic"
+        )
 
         # Normalize
         resized_image = resized_image / 255.0
@@ -89,14 +101,18 @@ class NST:
         Loads and modifies the VGG19 model for neural style transfer.
         """
         # Keras API
-        modelVGG19 = tf.keras.applications.VGG19(include_top=False, weights="imagenet")
+        modelVGG19 = tf.keras.applications.VGG19(
+            include_top=False, weights="imagenet"
+        )
 
         modelVGG19.trainable = False
 
         # selected layers
         selected_layers = self.style_layers + [self.content_layer]
 
-        outputs = [modelVGG19.get_layer(name).output for name in selected_layers]
+        outputs = [
+            modelVGG19.get_layer(name).output for name in selected_layers
+        ]
 
         # construct model
         model = tf.keras.Model([modelVGG19.input], outputs)
@@ -129,7 +145,9 @@ class NST:
         input_layer_reshaped = tf.reshape(input_layer, (h * w, c))
 
         # Compute the gram matrix
-        gram = tf.matmul(input_layer_reshaped, input_layer_reshaped, transpose_a=True)
+        gram = tf.matmul(
+            input_layer_reshaped, input_layer_reshaped, transpose_a=True
+        )
 
         # Normalize the gram matrix
         gram_matrix = tf.expand_dims(gram / tf.cast(h * w, tf.float32), axis=0)
@@ -185,12 +203,16 @@ class NST:
             gram_target, (tf.Tensor, tf.Variable)
         ) or gram_target.shape != [1, c, c]:
             raise TypeError(
-                "gram_target must be a tensor of shape [{}, {}, {}]".format(m, c, c)
+                "gram_target must be a tensor of shape [{}, {}, {}]".format(
+                    m, c, c
+                )
             )
 
         output_gram_style = self.gram_matrix(style_output)
 
         # difference between two gram matrix
-        layer_style_cost = tf.reduce_mean(tf.square(output_gram_style - gram_target))
+        layer_style_cost = tf.reduce_mean(
+            tf.square(output_gram_style - gram_target)
+        )
 
         return layer_style_cost

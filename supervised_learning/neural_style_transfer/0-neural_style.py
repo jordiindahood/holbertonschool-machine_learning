@@ -28,7 +28,9 @@ class NST:
             or style_image.ndim != 3
             or style_image.shape[2] != 3
         ):
-            raise TypeError("style_image must be a numpy.ndarray with shape (h, w, 3)")
+            raise TypeError(
+                "style_image must be a numpy.ndarray with shape (h, w, 3)"
+            )
 
         # Validate content_image
         if (
@@ -59,8 +61,14 @@ class NST:
         """Rescale image"""
 
         # Validate image
-        if not isinstance(image, np.ndarray) or image.ndim != 3 or image.shape[2] != 3:
-            raise TypeError("image must be a numpy.ndarray with shape (h, w, 3)")
+        if (
+            not isinstance(image, np.ndarray)
+            or image.ndim != 3
+            or image.shape[2] != 3
+        ):
+            raise TypeError(
+                "image must be a numpy.ndarray with shape (h, w, 3)"
+            )
 
         h, w, _ = image.shape
 
