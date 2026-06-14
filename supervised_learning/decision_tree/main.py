@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-Node = __import__("6-build_decision_tree").Node
-Leaf = __import__("6-build_decision_tree").Leaf
-Decision_Tree = __import__("6-build_decision_tree").Decision_Tree
+Node = __import__('6-build_decision_tree').Node
+Leaf = __import__('6-build_decision_tree').Leaf
+Decision_Tree = __import__('6-build_decision_tree').Decision_Tree
 import numpy as np  # noqa: E402
 
 

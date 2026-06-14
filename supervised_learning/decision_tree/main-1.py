@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-Decision_Tree = __import__("7-build_decision_tree").Decision_Tree
+Decision_Tree = __import__('7-build_decision_tree').Decision_Tree
 import numpy as np  # noqa: E402
 from sklearn import datasets  # noqa: E402
 

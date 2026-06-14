@@ -4,7 +4,7 @@
 
 import pandas as pd
 
-index = __import__("10-index").index
+index = __import__('10-index').index
 
 
 def hierarchy(df1, df2):
