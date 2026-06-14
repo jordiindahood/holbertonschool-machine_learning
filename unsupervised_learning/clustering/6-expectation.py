@@ -4,7 +4,7 @@
 
 import numpy as np
 
-pdf = __import__("5-pdf").pdf
+pdf = __import__('5-pdf').pdf
 
 
 def expectation(X, pi, m, S):
